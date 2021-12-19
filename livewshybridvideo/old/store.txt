@@ -1,0 +1,220 @@
+//////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+//https://stackoverflow.com/questions/11817750/drag-and-drop-on-touchscreen
+/*
+$html .='
+<script>
+ function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "")) {
+    /* if present, the header is where you move the DIV from:*/
+    document.getElementById(elmnt.id + "").onmousedown = dragMouseDown;
+  } else {
+    /* otherwise, move the DIV from anywhere inside the DIV:*/
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the elements new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement(e) {
+    /* stop moving when mouse button is released:*/
+
+        for( let i=0; i< bub1.length; i++) {
+             
+                           //alert(bub1[i].x);
+                          //console.log(bub1[i]);
+             
+             let bubvals = Object.values(bub1[i]);
+             
+             let bubtop = parseInt(elmnt.style.top.replace(/\D/g, ""));
+             let bubleft = parseInt(elmnt.style.left.replace(/\D/g, ""));
+             let bubwidth = parseInt(elmnt.style.left.replace(/\D/g, "")) +parseInt(elmnt.style.width.replace(/\D/g, ""));
+             let bubheight = parseInt(elmnt.style.top.replace(/\D/g, "")) +parseInt(elmnt.style.height.replace(/\D/g, ""));
+             
+                         //console.log(elmnt.style.width,elmnt.style.width.replace(/\D/g, ""),parseInt(elmnt.style.width.replace(/\D/g, "")));
+              //console.log(bubtop,bubleft,bubwidth,bubheight);
+                           // alert(bubtop+"-"+bubleft+"-"+bubwidth+"-"+bubheight);
+
+             
+             if( bubvals[0] > bubleft && bubvals[1] > bubtop  )
+                {   
+                                      //  alert("hello1");
+                       if( bubvals[0] < bubwidth && bubvals[1] < bubheight){
+                       document.getElementById("ex1AnsBox"+i).value = elmnt.id.replace(/\D/g, "");
+                          //alert("hello2");
+                          console.log(bub1[i]);
+                          console.log(i);                          
+                       console.log(document.getElementById("ex1AnsBox"+i).value);
+                       }
+               } //if bubb
+ 
+        }
+
+     document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+ </script>';
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+$html .='
+<script>
+ function touchElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "")) {
+    /* if present, the header is where you move the DIV from:*/
+    document.getElementById(elmnt.id + "").ontouchstart = dragTouchDown;
+  } else {
+    /* otherwise, move the DIV from anywhere inside the DIV:*/
+    elmnt.ontouchstart = dragTouchDown;
+  }
+
+  function dragTouchDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX || e.targetTouches[0].clientX;
+    pos4 = e.clientY || e.targetTouches[0].clientY;
+    document.ontouchend = closeTouchElement;
+    // call a function whenever the cursor moves:
+    document.ontouchmove = elementTouch;
+  }
+
+  function elementTouch(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.targetTouches[0].clientX;
+    pos2 = pos4 - e.targetTouches[0].clientY;
+    pos3 = e.clientX || e.targetTouches[0].clientX;
+    pos4 = e.clientY || e.targetTouches[0].clientY;
+    // set the elements new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    //alert(elmnt.style.top);
+  }
+
+  function closeTouchElement(e) {
+    /* stop moving when mouse button is released:*/
+    
+      //var _x = e.touches[0].clientX;
+     //var _y = e.touches[0].clientY;
+     //alert(_x,_y);
+
+        for( let i=0; i< bub1.length; i++) {
+             
+                           //alert(bub1[i].x);
+                          //console.log(bub1[i]);
+             
+             let tbubvals = Object.values(bub1[i]);
+             
+             var tbubtop = parseInt(elmnt.style.top.replace(/^[0-9]*\.?[0-9]*$/g, ""));
+             var tbubleft = parseInt(elmnt.style.left.replace(/^[0-9]*\.?[0-9]*$/g, ""));
+             var tbubwidth = +parseInt(elmnt.style.left.replace(/^[0-9]*\.?[0-9]*$/g, "")) +parseInt(elmnt.style.width.replace(/^[0-9]*\.?[0-9]*$/g, ""));
+             var tbubheight = +parseInt(elmnt.style.top.replace(/^[0-9]*\.?[0-9]*$/g, "")) +parseInt(elmnt.style.height.replace(/^[0-9]*\.?[0-9]*$/g, ""));
+             
+              //console.log(elmnt.style.width,elmnt.style.width.replace(/\D/g, ""),parseInt(elmnt.style.width.replace(/\D/g, "")));
+           //alert(tbubtop+"-"+tbubheight+"-"+tbubleft+"-"+tbubwidth);
+              //alert(window.innerHeight+"-"+window.innerWidth);
+             
+             if( tbubvals[0] > tbubleft && tbubvals[1] > tbubtop  )
+                {   
+                                      //  alert("hello1");
+                       if( tbubvals[0] < tbubwidth && tbubvals[1] < tbubheight){
+                       document.getElementById("ex1AnsBox"+i).value = elmnt.id.replace(/\D/g, "");
+                          //alert("hello2");
+                          console.log(bub1[i]);
+                          console.log(i);                          
+                       console.log(document.getElementById("ex1AnsBox"+i).value);
+                       }
+               } //if bubb
+ 
+        }
+
+     document.ontouchend = null;
+    document.ontouchmove = null;
+  }
+}
+ </script>';
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////                    
+             for( let i=0; i< bub1.length; i++) {
+             
+             
+             let tbubvals = Object.values(bub1[i]);
+             
+             var tbubtop = parseInt(this.style.top.replace(/^[0-9]*\.?[0-9]*$/g, ""));
+             var tbubleft = parseInt(this.style.left.replace(/^[0-9]*\.?[0-9]*$/g, ""));
+             var tbubwidth = +parseInt(this.style.left.replace(/^[0-9]*\.?[0-9]*$/g, "")) +parseInt(this.style.width.replace(/^[0-9]*\.?[0-9]*$/g, ""));
+             var tbubheight = +parseInt(this.style.top.replace(/^[0-9]*\.?[0-9]*$/g, "")) +parseInt(this.style.height.replace(/^[0-9]*\.?[0-9]*$/g, ""));
+             
+              //console.log(elmnt.style.width,elmnt.style.width.replace(/\D/g, ""),parseInt(elmnt.style.width.replace(/\D/g, "")));
+           //alert(tbubtop+"-"+tbubheight+"-"+tbubleft+"-"+tbubwidth);
+              //alert(window.innerHeight+"-"+window.innerWidth);
+             
+             if( tbubvals[0] > tbubleft && tbubvals[1] > tbubtop  )
+                {   
+                                      //  alert("hello1");
+                       if( tbubvals[0] < tbubwidth && tbubvals[1] < tbubheight){
+                       document.getElementById("ex1AnsBox"+i).value = this.id.replace(/\D/g, "");
+                         // alert("hello2");
+                         // console.log(bub1[i]);
+                         // console.log(i);                          
+                       //console.log(document.getElementById("ex1AnsBox"+i).value);
+                       }
+               } //if bubb
+ 
+                }
+   
+///////////////////////////////////////////////////                    
+///////////////////////////////////                    
+             for( let i=0; i< bub1.length; i++) {
+             
+             
+             let tbubvals = Object.values(bub1[i]);
+             
+             var tbubtop = parseInt(this.style.top);
+             var tbubleft = parseInt(this.style.left);
+             var tbubwidth = +parseInt(this.style.left) +parseInt(this.style.width);
+             var tbubheight = +parseInt(this.style.top) +parseInt(this.style.height);
+             
+          // alert(tbubtop+"-"+tbubheight+"-"+tbubleft+"-"+tbubwidth);
+             
+             if( tbubvals[0] > tbubleft && tbubvals[1] > tbubtop  )
+                {   
+                       
+                       if( tbubvals[0] < tbubwidth && tbubvals[1] < tbubheight){
+                       document.getElementById("ex1AnsBox"+i).value = this.id.substr(6);
+                       }
+               } //if bubb
+ 
+                }
+   
+///////////////////////////////////////////////////                    
+

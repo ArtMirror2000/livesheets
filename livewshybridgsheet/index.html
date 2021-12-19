@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<style>
+#trial {
+ background-image: url("expla.png");
+ background-repeat: no-repeat;
+ }
+#mydiv {
+  position: absolute;
+  z-index: 9;
+  
+  text-align: center;
+  border: 1px solid #d3d3d3;
+}
+
+#mydivheader {
+  padding: 10px;
+  cursor: move;
+  z-index: 10;
+
+  color: #fff;
+}
+/*
+#trial,#d4 {
+ background-image: url("workplace.jpg");
+  /*background-position: -50px -50px;   background-size: cover;*/
+    background-repeat: no-repeat;
+}
+*/
+#div1, #div2, #div3 {
+  float: left;
+  width: 200px;
+  height: 200px;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid black;
+}
+</style>
+
+<script src="html2canvas.js"></script>
+<script src="https://superal.github.io/canvas2image/canvas2image.js"></script>
+<script>
+function mySubmit(e){
+
+
+var poststring = "";
+bubbles.forEach(function(bubble) {
+    poststring = poststring + bubble.x + "^" + bubble.y +"=";
+});
+         var hidbubble = document.createElement("input");
+        hidbubble.id = "hidbub";
+        hidbubble.name = "hidbub";
+        hidbubble.type = "hidden";    
+        hidbubble.value = poststring;
+         var hidbubblex = document.getElementById("myform");
+         hidbubblex.appendChild(hidbubble);
+
+
+var grabber = document.getElementById("usremail");
+if (grabber.value == ""){
+e.preventDefault();alert("Enter your email!"); return false;}
+}
+</script>
+
+
+
+<body style="margin:0px;padding:0px;" oncontextmenu="return false;">
+<div id="trial" style=" height: 1800px;width: 1000 px;margin:0px;padding:0px;">
+
+
+
+<input type="file" id="filetag">
+<!--<button id="toggle" onclick="toggleBox(this)"> Toggle Input</button>-->
+<form onsubmit="mySubmit(event)" action="output.html" method="post" id="myform">
+<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" checked>
+<label for="vehicle1"> Allow Buttons and Page Refresh</label><br>
+<input type="hidden" id="hidurl" name="hidurl" value="" />
+<input type="text" id="frmname" name="frmname" value="" placeholder="Enter Sheet Name" required/>
+<input type="text" id="usremail" name="usremail" value="" placeholder="Enter Teacher Email" required/>
+<input type="text" id="embedutube" name="embedutube" value="" placeholder="Enter Embed Code </>" />
+
+
+<button type="submit"  id="btn"> Submit</button>
+</form>
+
+
+
+
+
+
+</div>
+
+<script>
+
+//var answers = new Array(50).fill(0); 
+var bubbles = [];
+var answers = [];
+var reader;
+
+
+var fileTag = document.getElementById("filetag");
+   // preview = document.getElementById("preview");
+    
+fileTag.addEventListener("change", function() {
+ // changeImage(this);
+
+   const dataUrl = encodeImageFileAsURL(this);
+  // console.log(dataUrl);
+
+});
+function encodeImageFileAsURL(element) {
+  var file = element.files[0];
+   reader = new FileReader();
+  reader.onloadend = function() {
+    //console.log('RESULT', reader.result)
+         bg = document.getElementById("trial");
+        bg.style.backgroundImage = "url("+reader.result+")";
+        bg.style.backgroundRepeat = "no-repeat";
+        
+          hidden = document.getElementById("hidurl");
+             hidden.value = reader.result;
+            //console.log(hidden.value);
+  }
+  reader.readAsDataURL(file);
+}
+
+</script>
+<script>
+
+var ctr=0;var circctr=0;
+var xstart; var ystart;
+var offset ="";
+
+var contxt =  document.getElementById('trial');
+
+contxt.addEventListener("dblclick", function( event ) {
+              //event.preventDefault();
+             // alert(event.button);
+         if (event.button === 0) {         
+              circctr++;
+                      var circle = document.createElement("div");
+              circle.id = "mycircle"+circctr;//
+              circle.style.position = "absolute";
+              circle.style.left = event.pageX+"px";
+              circle.style.top = event.pageY+"px";
+              circle.style.background = "red";                               
+             circle.style.width = (10)+"px";
+             circle.style.height = (10)+"px";
+             circle.style.borderRadius = "5px";
+             circle.style.zIndex = 1000;             
+             var parent = document.getElementById("trial");
+             parent.appendChild(circle);
+             
+             bubbles.push({x: circle.style.left , y: circle.style.top});
+             console.table(bubbles);
+
+         var dotinput = document.createElement("input");
+        dotinput.id = "dot"+circctr;//
+        dotinput.name = "dot"+circctr;//
+        dotinput.className = "dotpartpic";
+        dotinput.type = "hidden";    
+        var wwidth= (+event.pageX+10); var hheight= (+event.pageY+10);
+        dotinput.value = circctr+"^"+circle.style.left+"^"+circle.style.top+"^"+wwidth+"^"+hheight;
+         //var dotparent = document.getElementById("trial");
+         //dotparent.appendChild(hidinput);
+         var dotparentx = document.getElementById("myform");
+         dotparentx.appendChild(dotinput);
+         }
+  
+});
+contxt.addEventListener("xxclick", function( event ) {
+ //alert(event.button);
+
+/////////////////////////////////////////////                        
+});
+
+contxt.addEventListener("mousedown", function( event ) {
+    //alert(event.button);
+    //https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_draggable
+             /////////////////////////////////////////////
+                  if (event.button === 2) {     
+                  
+                          circctr++;
+                          
+         var input = document.createElement("input");
+input.type = "text";
+input.name = "vals"+circctr;
+//input.value = event.pageX+"-"+event.pageY+"-";
+input.value = "";
+input.className = "ddbox"; // set the CSS class
+input.style.background = "gold";
+input.style.lineHeight="20px";
+input.style.fontSize="20px";
+input.size = "7";
+input.style.position = "absolute";
+input.style.left = event.pageX+"px";
+input.style.top = event.pageY+"px";
+var xparent = document.getElementById("trial");
+xparent.appendChild(input);
+var ddparent = document.getElementById("myform");
+ddparent.appendChild(input);
+
+
+         var ddhidinput = document.createElement("input");
+        ddhidinput.type = "hidden";    
+        ddhidinput.id = "ddmydivheader"+circctr;//
+        ddhidinput.name = "valsdata"+circctr;//
+        ddhidinput.className = "ddhidpartpic";
+
+        
+        ddhidinput.value = circctr+"^"+input.style.left+"^"+input.style.top+"^"+input.style.lineHeight+"^"+input.style.fontSize+"^"+input.className+"^"+circctr;
+    
+        //ddhidinput.value = ctr+"^"+xxstart+"^"+yystart+"^"+(px-xxstart)+"^"+(py-yystart)+"^"+"placeholder"+"^"+offset;//inputx.style.backgroundPosition;
+         var ddhidparent = document.getElementById("trial");
+         ddhidparent.appendChild(ddhidinput);
+         console.log(ddhidinput.value);
+        var ddhidparentx = document.getElementById("myform");
+        ddhidparentx.appendChild(ddhidinput);
+//alert("done");
+/*
+var xco = document.createElement("input");
+xco.type = "hidden";
+xco.name = "xco-"+ctr;
+xco.value = event.pageX;
+var yco = document.createElement("input");
+yco.type = "hidden";
+yco.name = "yco-"+ctr;
+yco.value = event.pageY;
+
+ // put it into the DOM
+
+parent.appendChild(xco);
+parent.appendChild(yco);
+var parform = document.getElementById("myform");
+parform.appendChild(input);
+parform.appendChild(xco);
+parform.appendChild(yco);
+ */        
+         }
+         /////////////////////////////////////////////                      
+    if (event.button === 1) {
+      event.preventDefault();
+        ctr++;
+        offset ="";
+        var input = document.createElement("div");
+        input.id = "mydivheader"+ctr;//
+        input.className = "partpic";
+        input.style.position = "absolute";
+        input.style.left = event.pageX+"px";
+        input.style.top = event.pageY+"px";
+        input.style.borderStyle = "solid";
+        //input.className = "npt"; // set the CSS class
+        
+        
+        var whiteinput = document.createElement("div");
+        whiteinput.id = "whitemydivheader"+ctr;//
+        whiteinput.className = "whitepartpic";
+        whiteinput.style.position = "absolute";
+        whiteinput.style.left = event.pageX+"px";
+        whiteinput.style.top = event.pageY+"px";
+        whiteinput.style.borderStyle = "none";
+        //whiteinput.className = "whitenpt"; // set the CSS class
+                whiteinput.style.background = "white";
+                
+                
+
+         xstart  = -(event.pageX-0)+"px";
+         ystart  = -(event.pageY-0)+"px";
+                       offset = offset+xstart+' '+ystart;   
+
+         xxstart  = (event.pageX-0);
+         yystart  = (event.pageY-0);         
+         input.style.backgroundImage = "url("+reader.result+")";//'url("workplace.jpg")';//
+         input.style.backgroundPosition =  xstart+' '+ystart;
+         input.style.backgroundRepeat = 'no-repeat';
+
+
+
+         var parent = document.getElementById("trial");
+         parent.appendChild(whiteinput);
+         parent.appendChild(input);
+
+         }
+          }, false);
+    
+///////////////////////////////////////////////////////////   
+          /* events fired on the draggable target */
+          contxt.addEventListener("mouseup", function( event ) {
+          
+              if (event.button === 1) {
+        event.preventDefault();
+        
+                              // alert(offset);
+        
+         var inputx = document.getElementById('mydivheader'+ctr);
+         var whiteinputx = document.getElementById('whitemydivheader'+ctr);
+         
+           var px = event.pageX;
+           var py = event.pageY;
+         inputx.style.width = (px-xxstart)+"px";
+         inputx.style.height = (py-yystart)+"px";
+         whiteinputx.style.width = (px-xxstart)+"px";
+         whiteinputx.style.height = (py-yystart)+"px";
+         
+         var hidinput = document.createElement("input");
+        hidinput.id = "hidmydivheader"+ctr;//
+        hidinput.name = "answer"+ctr;//
+        hidinput.className = "hidpartpic";
+        hidinput.type = "hidden";                                                       //url("+reader.result+")
+        hidinput.value = ctr+"^"+xxstart+"^"+yystart+"^"+(px-xxstart)+"^"+(py-yystart)+"^"+"placeholder"+"^"+offset;//inputx.style.backgroundPosition;
+         //var hidparent = document.getElementById("trial");
+         //hidparent.appendChild(hidinput);
+         //console.log(hidinput.value);
+        var hidparentx = document.getElementById("myform");
+        hidparentx.appendChild(hidinput);
+
+
+         var whitehidinput = document.createElement("input");
+        whitehidinput.id = "whitehidmydivheader"+ctr;//
+        whitehidinput.name = "white"+ctr;//
+        whitehidinput.className = "whitehidpartpic";
+        whitehidinput.type = "hidden";    
+        whitehidinput.value = ctr+"^"+whiteinputx.style.left+"^"+whiteinputx.style.top+"^"+whiteinputx.style.width+"^"+whiteinputx.style.height;
+         //var hidparent = document.getElementById("trial");
+         //hidparent.appendChild(hidinput);
+         var whitehidparentx = document.getElementById("myform");
+         whitehidparentx.appendChild(whitehidinput);
+
+             /*
+         for( let i=0; i< bubbles.length; i++) {
+         
+          if( bubbles[i].x > xxstart && bubbles[i].y > yystart && bubbles[i].x < (px-xxstart) && bubbles[i].y < (py-yystart) )
+                     {answers[i].push({x: xxstart, y: yystart, w: (px-xxstart) , h: py-yystart});
+                      console.table(answers);}
+                      
+         }
+         */
+         
+        ////////////////////////////////////////////////////////////////////////
+ 
+                dragElement(document.getElementById("mydivheader"+ctr));
+ 
+        html2canvas(document.getElementById("mydivheader"+ctr), {
+          onrendered: function(canvas) {
+             var img = canvas.toDataURL()
+                 window.open(img);
+                 console.log(img);
+           // return Canvas2Image.saveAsPNG(canvas);
+                  }
+                    });
+                    
+        //     ////////////////////
+             /////////////////////////////////////////////////
+
+
+           }
+            }, false);
+//https://www.w3schools.com/howto/howto_js_draggable.asp
+</script>
+ <script>
+ function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "")) {
+    /* if present, the header is where you move the DIV from:*/
+    document.getElementById(elmnt.id + "").onmousedown = dragMouseDown;
+  } else {
+    /* otherwise, move the DIV from anywhere inside the DIV:*/
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement(e) {
+    /* stop moving when mouse button is released:*/
+                                                    //alert(elmnt.id+" "+elmnt.style.top+" "+elmnt.style.left+" "+elmnt.style.width+" "+elmnt.style.height+" "+e.clientX);
+    var lstcheck = document.getElementById("hid"+elmnt.id);
+                                                       //
+    var myArr = lstcheck.value.split("^");
+    lstcheck.value = "";                                              //console.log(myArr);
+    lstcheck.value = myArr[0]+"^"+elmnt.style.left+"^"+elmnt.style.top+"^"+elmnt.style.width+"^"+elmnt.style.height+"^"+myArr[5]+"^"+myArr[6];
+                                                 //alert(lstcheck.value);
+                                                 // console.log(lstcheck.value);
+
+       ////////////////////////////////////////////
+                    for( let i=0; i< bubbles.length; i++) {
+         
+          if( bubbles[i].x > elmnt.style.left && bubbles[i].y > elmnt.style.top && bubbles[i].x < (+elmnt.style.left+elmnt.style.width) && bubbles[i].y < (+elmnt.style.top+elmnt.style.height) )
+               { answers.push({id: myArr[0], x: elmnt.style.left, y: elmnt.style.top, w: elmnt.style.width, h: elmnt.style.height});}
+              }
+
+         console.table(answers);
+     //////////////////////////////////////////////////////////////////        
+     document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+ </script>
+</body>
+</html>

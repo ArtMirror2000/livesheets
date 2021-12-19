@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Live Worksheets</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=WindSong&display=swap" rel="stylesheet">
+<style type="text/css">
+.instrC{
+color:gray;
+font-weight:bold;
+}
+.wordbox{
+border:solid gray 2px;
+margin:10px auto;
+padding:3px 5px;
+line-height:1.5;
+font-weight:bold;
+color:gray;
+padding:4px 10px;
+border-radius:15px;
+-moz-border-radius:15px;
+-webkit-border-radius:15px;
+-o-border-radius:15px;
+box-shadow:2px 2px 7px #333;
+-moz-box-shadow:2px 2px 7px #333;
+-webkit-box-shadow:2px 2px 7px #333;
+-o-box-shadow:2px 2px 7px #333;
+text-align:center;
+}
+.optionWord{
+color:gray;
+font-weight:bold;
+}
+.optionWord a{
+color:gray;
+text-decoration:none;
+}
+.optionWord a:hover{
+color:black;
+text-decoration:none;
+}
+.tdNumC{
+padding:0 7px 0 0px;
+color:gray;
+font-weight:bold;
+vertical-align:top;
+}
+.buttonC{
+background:gray;
+color:white;
+padding:2px 3px;
+font-weight:bold;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+-o-border-radius:5px;
+-moz-box-shadow:1px 1px 5px #333;
+-webkit-box-shadow:1px 1px 5px #333;
+-o-box-shadow:1px 1px 5px #333;
+margin:0 2px;
+}
+.textBoxC{
+border:none;
+border-bottom:1px dotted gray;
+}
+
+</style>
+<script type="text/javascript">
+var clickedWord="";
+ var ca=0;
+ var qlen=0;var ans1=];var bub1=[{x:813, y:323},{x:814, y:399}];
+function checkAnsBoxAnswersV2(ansCode,exNum){ 
+var grax = document.getElementById("css3");
+console.log("grax",grax);
+if (grax.value == ""){
+//e.preventDefault();
+//alert("Enter your name!"); 
+ document.getElementById("messageArea1").innerHTML="<span style=z-index:100000;color:red;font-weight:bold;>Enter your name!</span>";
+return false;
+}
+
+   ca=0;
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans=doAnswers(guess,ansCode[c]);
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else{
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.background="orange" ;
+    } 
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+function checkAnsBoxInvisibleAnswersScoreV2(ansCode,exNum){
+   ca=0;
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans=doAnswers(guess,ansCode[c]);
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(1);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else if(guess==""){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(3);
+    }
+    else{
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(2);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="red";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+function doAnswers(guess,ans){
+  if(guess==ans){
+    txt="yes";
+  }
+  else{
+    txt="no";
+  }
+  return txt;
+}
+function getInvisibleAnswersSign(x){
+  if(x==1){
+    var txt="<span style=color:green;font-weight:bold;>Y</span>";
+  }
+  else if(x==2){ 
+    var txt="<span style=font-size:100%;color:red;font-weight:bold;>X</span>";
+  }
+  else if(x==3){ 
+    var txt="<span style=font-size:100%;color:orange;font-weight:bold;>?</span>";
+  }
+  return txt  ;
+}
+function showScoreV2(ansCode,exNum,ca){
+  qlen=ansCode.length;
+  var pc=ca/qlen*100;
+  pc=Math.round(pc);                                                                                                                                                                                                                                                                   //  onclick="document.getElementById("clkform").submit()" ontouchend="document.getElementById("clkform").submit()" 
+  var txt="<span style=z-index:100000;color:red;font-weight:bold;>You have scored "+pc+" percent</span> <br> <span style=z-index:100000;color:red;font-weight:bold;font-size:250px> "+ca+"/"+qlen+" </span>";
+    document.getElementById("scoreipt").value=ca+"/"+qlen;   txt = txt+"<button onclick=document.getElementById('clkform').submit() ontouchend=document.getElementById( 'clkform').submit()  class=buttonC id=submit name=submit  value=Submit>Submit</button>  ";     document.getElementById("messageArea"+exNum).innerHTML=txt;
+}
+function doSpaces(exNum,qNum){
+  var txt=document.getElementById("ex"+exNum+"AnsBox"+qNum).value;
+  if(txt.charAt(txt.length-1)==" "){
+    txt=txt.slice(0,txt.length-1);
+    document.getElementById("ex"+exNum+"AnsBox"+qNum).value=txt;
+  }
+  return txt;
+}
+// JS Code for showing the answers
+function showAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  if(document.getElementById("ex"+exNum+"AnsBox"+c).value==ansCode[c]){
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+  }
+  else{
+    document.getElementById("ex"+exNum+"AnsBox"+c).value=ansCode[c];
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.background="orange";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+}
+// JS Code for clearing the answers
+function clearAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  //document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.background="lightgrey";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+  }
+  clearMessageArea(exNum);
+}
+function clearAnsBoxInvisibleAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+    //document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+    document.getElementById("ex"+exNum+"TickBox"+c).innerHTML="";
+  }
+  clearMessageArea(exNum);
+}
+function clearMessageArea(exNum){
+  document.getElementById("messageArea"+exNum).innerHTML="";
+}
+// Optional JS Code for Click and Drop
+function makeClickedWord(exNum,x){
+  var txt=document.getElementById("ex"+exNum+"Word"+x).innerHTML;
+  clickedWord=txt;
+}
+function enterClickedWord(exNum,x){
+  var txt=clickedWord;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=txt;
+  clickedWord="";
+}
+function enterClickedWordCap(exNum,x){
+  var txt=clickedWord;
+  var firstLetter=txt.slice(0,1);
+  firstLetter=firstLetter.toUpperCase();
+  var rest=txt.slice(1,txt.length);
+  txt=firstLetter+rest;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=txt;
+  clickedWord="";
+}
+</script>    
+
+<script>
+//https://www.horuskol.net/blog/2020-08-15/drag-and-drop-elements-on-touch-devices/
+
+var moving = null;
+           var elmnt; //= document.createElement("div");
+           
+///////////////////////////////////////////////////////////////////////////           
+
+function pickup(event) {
+
+if(event.target.className.localeCompare("moveable") == 0){
+event.preventDefault();
+    //moving = null;
+    moving = event.target;
+                console.log("hello1",moving.id);
+                 
+    moving.style.height = +moving.clientHeight+2;
+    moving.style.width = +moving.clientWidth+2;
+    moving.style.position = "absolute";
+    //moving.style.zIndex = "-10";
+    
+    var myobj = document.getElementById(moving.id);
+    myobj.remove(); 
+   
+               elmnt = document.createElement("div");
+    
+               elmnt.id = moving.id;
+             elmnt.className = "moveable";
+           
+             elmnt.style.border = "solid 1px" ;
+             elmnt.style.position = "absolute";
+             elmnt.style.width =  moving.style.width;   
+             elmnt.style.height =  moving.style.height;   
+             elmnt.style.backgroundImage =  moving.style.backgroundImage;                
+             elmnt.style.backgroundPosition =  moving.style.backgroundPosition;                
+             elmnt.style.backgroundRepeat = moving.style.backgroundRepeat;                
+             elmnt.style.zIndex = "10000";
+
+    
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+function stopper(event){
+    if (moving) {
+    
+            let mwidth = parseInt(moving.style.width.replace(/\D/g, ""))/2;
+            let mheight = parseInt(moving.style.height.replace(/\D/g, ""))/2;
+
+           //alert(event.clientX+"-"+event.clientY);
+           console.log(moving);
+
+    if (moving) {
+        if (event.clientX) {
+        //if (event.changedTouches[0].clientX) {
+                                  // mousemove
+            console.log("mousemove");
+            //moving.style.left = event.clientX - moving.clientWidth/2;
+            //moving.style.top = event.clientY - moving.clientHeight/2;
+            elmnt.style.left = (event.pageX-(parseInt(elmnt.style.width)/2)) +"px";// -mwidth + 0
+            elmnt.style.top = (event.pageY-(parseInt(elmnt.style.height)/2) ) +"px"; //  + moving.getBoundingClientRect().top -mheight
+
+
+        } else {
+            
+                         // touchmove - assuming a single touchpoint
+                        console.log("touchmove");
+            //moving.style.left = event.changedTouches[0].clientX - moving.clientWidth/2;
+            //moving.style.top = event.changedTouches[0].clientY - moving.clientHeight/2;
+            elmnt.style.left = (event.changedTouches[0].pageX- (parseInt(elmnt.style.width)/2) ) +"px";//moving.clientWidth/2 clientX
+            elmnt.style.top = (event.changedTouches[0].pageY- (parseInt(elmnt.style.height)/2) ) +"px";//   moving.clientHeight/2
+
+        }
+    }
+            
+
+            let addit = document.getElementById("viewer");
+            addit.appendChild(elmnt);
+            
+
+
+            console.log(elmnt);
+        myMoveScore(elmnt);
+       moving = null;
+
+
+}
+}
+</script>
+            <script>
+           function myMoveScore(tthis){
+                   //   alert("drag");
+           
+           let xelements = document.getElementsByClassName("storex");
+           let yelements = document.getElementsByClassName("storey");
+           
+           for( let i=0; i< xelements.length; i++) {
+
+             var tbubtop = parseInt(tthis.style.top);
+             var tbubleft = parseInt(tthis.style.left);
+             var tbubwidth = +parseInt(tthis.style.left) +parseInt(tthis.style.width);
+             var tbubheight = +parseInt(tthis.style.top) +parseInt(tthis.style.height);
+             
+             var dleft = parseInt(xelements[i].value);
+             var dtop = parseInt(yelements[i].value);
+             var dwidth = parseInt(xelements[i].value);
+             var dheight = parseInt(yelements[i].value);
+             
+             
+                 if( dleft > tbubleft && dtop > tbubtop  )
+                  {                         
+                       if( dwidth < tbubwidth && dheight < tbubheight){
+                       document.getElementById("ex1AnsBox"+i).value = tthis.id.substr(6);
+                                        //      alert("hello2");
+                       }
+               } //if bubb
+ 
+
+               }//for i
+               }
+     </script>    
+<style>
+#viewer {background-image: url(http://riadaamericanschool.org/formmaker/livewshybrid/images/1488466979.jpg);background-position: left top;background-repeat: no-repeat;height:1800px;width:1000px;margin:0px;padding:0px;}#answer1  {border:solid 1px;position:absolute;left:;top:;width:167;height:85;background-image:url(http://riadaamericanschool.org/formmaker/livewshybrid/images/1488466979.jpg);background-position:-341px -406px;background-repeat:no-repeat;}   #answer2  {border:solid 1px;position:absolute;left:;top:;width:206;height:113;background-image:url(http://riadaamericanschool.org/formmaker/livewshybrid/images/1488466979.jpg);background-position:-358px -504px;background-repeat:no-repeat;}   </style>
+</head>
+<body id="viewer"  onmousedown="pickup(event)" ontouchstart="pickup(event)"  onmouseup="stopper(event);" ontouchend="stopper(event)" xxxonmousemove="move(event)" xxxontouchmove="move(event)">
+
+<div>
+<form id="clkform" onsubmit="mySubmit(event)" action="http://riadaamericanschool.org/formmaker/livewshybrid/sendemail.php" method="post">
+<label for="css">Sheet Name: ttt</label><br>
+  <input type="hidden" id="css1" name="sheetname" value="ttt">
+  <label for="css2">Teacher Email: sherinedeyaa@riadaamericanschool.org</label><br>
+  <input type="hidden" id="css2" name="emailteacher" value="sherinedeyaa@riadaamericanschool.org">
+    <label for="css3">Student Name:</label>
+  <input type="text" id="css3" name="namestudent" placeholder="Enter Student Name" value="">
+      <label for="css4">Student Email:</label>
+  <input type="text" id="css4" name="emailstudent" placeholder="Enter Student Email" value="">
+  <input type="hidden" id="scoreipt" name="score" value="">
+  </div><div >
+<script>
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+
+
+
+// Simulate an HTTP redirect:
+var refreshname = getCookie("refresh");
+if( refreshname.localeCompare("ttt") == 0){
+window.location.replace("http://www.riadaamericanschool.org");
+}
+</script><div  id="dot1"  style ="position:absolute;left:813px;top:323px;background:red;width:10px;height:10px;border-radius:5px;z-index : 1000; " ></div>    <div  id="white1" style ="border-style:dashed;background:whitesmoke;position:absolute;left:341px;top:406px;width:167px;height:85px; " ></div>    <div class="moveable"  onmousedown="pickup(event)" ontouchstart="pickup(event)" 
+id="answer1" style ="border:solid 1px;position:absolute;left:341px;top:406px;width:167px;height:85px;background-image:url(http://riadaamericanschool.org/formmaker/livewshybrid/images/1488466979.jpg);background-position:-341px -406px;background-repeat:no-repeat; " ></div>    <input type="hidden" style="display:hidden;visibility:none;" id="ex1AnsBox0" name="1" size="5"  class="textBoxC" value="" /><div  id="dot2"  style ="position:absolute;left:814px;top:399px;background:red;width:10px;height:10px;border-radius:5px;z-index : 1000; " ></div>    <div  id="white2" style ="border-style:dashed;background:whitesmoke;position:absolute;left:358px;top:504px;width:206px;height:113px; " ></div>    <div class="moveable"  onmousedown="pickup(event)" ontouchstart="pickup(event)" 
+id="answer2" style ="border:solid 1px;position:absolute;left:358px;top:504px;width:206px;height:113px;background-image:url(http://riadaamericanschool.org/formmaker/livewshybrid/images/1488466979.jpg);background-position:-358px -504px;background-repeat:no-repeat; " ></div>    <input type="hidden" style="display:hidden;visibility:none;" id="ex1AnsBox1" name="2" size="5"  class="textBoxC" value="" /><div style="z-index:55;margin:10px 0;"><br><br><input type="button" id="checker" class="buttonC" value="Check" onclick="checkAnsBoxAnswersV2(ans1,1);" ontouchend="checkAnsBoxAnswersV2(ans1,1);"/><input type="button" class="buttonC" value="Clear" onclick="location.reload();return false;" ontouchend="location.reload();return false;" /> <br><br><div id="messageArea1" style="position: relative;z-index:1000000;font-family:WindSong, cursive;font-size:300%;font-weight:bold;color:red;"></div></div></form><script>
+
+var sheetname = "ttt";
+
+
+
+
+
+function mySubmit(){
+//alert("Enter your name!");
+var grab = document.getElementById("css3");
+var shtname = getCookie("sheetname");
+console.log(shtname);
+console.log(document.cookie);
+ if (shtname != "ttt"){
+if (grab.value.localeCompare("") ==0){
+e.preventDefault();alert("Enter your name!"); return false;
+}
+
+document.cookie = "sheetname=ttt"; 
+}
+else{e.preventDefault();alert("Already submitted!");return false;}
+}</script><div id="storage"></div><script>
+    var txtx = document.createElement("textarea");
+              txtx.id = "x0"
+              txtx.className = "storex";
+              txtx.style.display = "none";
+              txtx.value = 813;
+    var txty = document.createElement("textarea");
+              txty.id = "y0"
+              txty.className = "storey";              
+              txty.style.display = "none";
+              txty.value = 323;
+     var parent = document.getElementById("storage");
+               parent.appendChild(txtx);
+               parent.appendChild(txty);
+    var txtx = document.createElement("textarea");
+              txtx.id = "x1"
+              txtx.className = "storex";
+              txtx.style.display = "none";
+              txtx.value = 814;
+    var txty = document.createElement("textarea");
+              txty.id = "y1"
+              txty.className = "storey";              
+              txty.style.display = "none";
+              txty.value = 399;
+     var parent = document.getElementById("storage");
+               parent.appendChild(txtx);
+               parent.appendChild(txty);
+ </script> 
+</script>
+ <script type = "text/javascript" >  
+    function preventBack() { window.history.forward(); }  
+    setTimeout("preventBack()", 0);  
+    window.onunload = function () { null };  
+</script> 
+</body>
+</html>
