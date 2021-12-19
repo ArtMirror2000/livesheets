@@ -1,0 +1,617 @@
+<?
+//https://stackoverflow.com/questions/17810501/php-get-base64-img-string-decode-and-save-as-jpg-resulting-empty-image
+//echo $_POST['hidurl'];
+$data = $_POST['hidurl'];
+//$data = 'data:image/png;base64,iVBORw0KGgoAAAAN';
+
+$data = str_replace('data:image/jpeg;base64,', '', $data);
+
+$data = str_replace(' ', '+', $data);
+
+$data = base64_decode($data);
+
+$randname = rand();
+
+$file = 'images/'.$randname. '.jpg';
+
+$success = file_put_contents($file, $data);
+
+
+
+$props= explode("=",$_POST["hidbub"]);
+for ($x = 0; $x < sizeof($props)-1 ; $x++){
+$ps= explode("^",$props[$x]);
+for ($y = 0; $y < sizeof($ps) ; $y++){
+$bubbles[$x][$y] = preg_replace( '/[^0-9]/', '',$ps[$y]);
+}
+}
+//echo"hidbub ";echo $_POST['hidbub'];
+//echo"bubbles ".sizeof($bubbles);print_r($bubbles); echo"<br>";
+////////////////////////////////////////////////////
+for ($x = 0; $x < 50 ; $x++){ //sizeof($props)
+if($_POST["answer".$x]){
+$ansprops= explode("^",$_POST["answer".$x]);
+for ($y = 0; $y < sizeof($ansprops) ; $y++){
+$answers[$x][$y] = $ansprops[$y];
+}
+}
+}
+//echo"answers";print_r($answers);echo"<br>";
+
+$ctr+0;
+/////////////////////////////////////////////////////
+$finals= array();
+$finalsbub= array();
+
+             
+             
+                      for( $i=0; $i<= sizeof($bubbles) ; $i++) { //
+                      
+                                   for ($p = 1; $p <= sizeof($answers) ; $p++){
+             
+             $bubleft =   preg_replace( '/[^0-9]/', '',$answers[$p][1]);
+             $bubtop =    preg_replace( '/[^0-9]/', '',$answers[$p][2]);
+             $bubwidth = (preg_replace( '/[^0-9]/', '',$answers[$p][1])+preg_replace( '/[^0-9]/', '',$answers[$p][3]));
+             $bubheight =(preg_replace( '/[^0-9]/', '',$answers[$p][2])+preg_replace( '/[^0-9]/', '',$answers[$p][4]));
+             
+        if( $bubbles[$i][0] > $bubleft && $bubbles[$i][1] > $bubtop && $bubbles[$i][0] < $bubwidth && $bubbles[$i][1] < $bubheight )
+                {   
+                 $ctr ++;
+                                                      //echo "Won!".sizeof($answers)."-".sizeof(bubbles);
+                                                      //$finals[$i+1] = $i+1;  
+                                                      // $finals[] = $answers[$p][0]; 
+             
+
+                $finals[$ctr] = $answers[$p][0]; 
+                
+                 //$finals[$bubtop] = $answers[$p][0]; 
+                 //
+                 //$finalsbub[$bubleft+$bubtop]["x"] = $bubbles[$i][0];
+                 //$finalsbub[$bubleft+$bubtop]["y"] = $bubbles[$i][1];
+                 
+               } //if bubb
+ 
+              }//p
+        }//i
+        
+//  echo"finals"; print_r($finals);echo"<br>";
+//    echo"finalsbub"; print_r($finals);echo"<br>";
+
+//////////////////////////////////////////////////////////////////
+
+      $anslist ='var ans1=[';
+                                                                                                                
+
+      //for($f =1; $f <= sizeof(finals); $f++){  
+      foreach($finals as $f){
+      
+
+      
+        // $anslist .='"'.finals[$f].'",';
+                  $anslist .='"'.$f.'",';
+
+      }
+      $anslist  = substr($anslist,0,-1);
+      $anslist .='];';
+      
+//  echo"anslist"; echo $anslist;   echo"<br>";
+   
+/////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+      $bublist ='var bub1=[';
+             foreach($bubbles as $b){ 
+             
+                      $bublist .='{x:'.$b[0].', y:'.$b[1].'},';
+             
+                }
+           $bublist  = substr($bublist,0,-1);
+         $bublist .='];';
+         
+//     echo"bublist";    echo $bublist;   echo"<br>";
+ /////////////////////////////////////////////////////////////////////  
+
+
+
+//print_r($_POST);
+
+
+$html = '<!DOCTYPE html>
+<html>
+<head>
+<title>Live Worksheets</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+';
+
+//////////////////////////////////////////////////////////////////////
+$html .='
+<link href="https://fonts.googleapis.com/css2?family=WindSong&display=swap" rel="stylesheet">
+<style type="text/css">
+.instrC{
+color:gray;
+font-weight:bold;
+}
+.wordbox{
+border:solid gray 2px;
+margin:10px auto;
+padding:3px 5px;
+line-height:1.5;
+font-weight:bold;
+color:gray;
+padding:4px 10px;
+border-radius:15px;
+-moz-border-radius:15px;
+-webkit-border-radius:15px;
+-o-border-radius:15px;
+box-shadow:2px 2px 7px #333;
+-moz-box-shadow:2px 2px 7px #333;
+-webkit-box-shadow:2px 2px 7px #333;
+-o-box-shadow:2px 2px 7px #333;
+text-align:center;
+}
+.optionWord{
+color:gray;
+font-weight:bold;
+}
+.optionWord a{
+color:gray;
+text-decoration:none;
+}
+.optionWord a:hover{
+color:black;
+text-decoration:none;
+}
+.tdNumC{
+padding:0 7px 0 0px;
+color:gray;
+font-weight:bold;
+vertical-align:top;
+}
+.buttonC{
+background:gray;
+color:white;
+padding:2px 3px;
+font-weight:bold;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+-o-border-radius:5px;
+-moz-box-shadow:1px 1px 5px #333;
+-webkit-box-shadow:1px 1px 5px #333;
+-o-box-shadow:1px 1px 5px #333;
+margin:0 2px;
+}
+.textBoxC{
+border:none;
+border-bottom:1px dotted gray;
+}
+
+</style>
+<script type="text/javascript">
+var clickedWord="";';
+
+//////////////////////////////
+////////////////////////////////    
+$html .= $anslist;
+$html .= $bublist;
+////////////////////////////
+
+      $html .= '
+function checkAnsBoxAnswersV2(ansCode,exNum){ 
+  var ca=0;
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans=doAnswers(guess,ansCode[c]);
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else{
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.background="orange" ;
+    } 
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+function checkAnsBoxInvisibleAnswersScoreV2(ansCode,exNum){
+  var ca=0;
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans=doAnswers(guess,ansCode[c]);
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(1);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else if(guess==""){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(3);
+    }
+    else{
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(2);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="red";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+function doAnswers(guess,ans){
+  if(guess==ans){
+    txt="yes";
+  }
+  else{
+    txt="no";
+  }
+  return txt;
+}
+function getInvisibleAnswersSign(x){
+  if(x==1){
+    var txt="<span style=color:green;font-weight:bold;>Y</span>";
+  }
+  else if(x==2){ 
+    var txt="<span style=font-size:100%;color:red;font-weight:bold;>X</span>";
+  }
+  else if(x==3){ 
+    var txt="<span style=font-size:100%;color:orange;font-weight:bold;>?</span>";
+  }
+  return txt  ;
+}
+function showScoreV2(ansCode,exNum,ca){
+  var qlen=ansCode.length;
+  var pc=ca/qlen*100;
+  pc=Math.round(pc);
+  var txt="<span style=z-index:100000;color:red;font-weight:bold;>You have scored "+pc+" percent</span> <br> <span style=z-index:100000;color:red;font-weight:bold;font-size:250px> "+ca+"/"+qlen+" </span><input type=hidden id=score name=score value="+ca+"/"+qlen+"><input type=submit id=submit name=submit  value=Submit>  ";
+  document.getElementById("messageArea"+exNum).innerHTML=txt;
+}
+function doSpaces(exNum,qNum){
+  var txt=document.getElementById("ex"+exNum+"AnsBox"+qNum).value;
+  if(txt.charAt(txt.length-1)==" "){
+    txt=txt.slice(0,txt.length-1);
+    document.getElementById("ex"+exNum+"AnsBox"+qNum).value=txt;
+  }
+  return txt;
+}
+// JS Code for showing the answers
+function showAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  if(document.getElementById("ex"+exNum+"AnsBox"+c).value==ansCode[c]){
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+  }
+  else{
+    document.getElementById("ex"+exNum+"AnsBox"+c).value=ansCode[c];
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.background="orange";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+}
+// JS Code for clearing the answers
+function clearAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  //document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.background="lightgrey";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+  }
+  clearMessageArea(exNum);
+}
+function clearAnsBoxInvisibleAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+    //document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+    document.getElementById("ex"+exNum+"TickBox"+c).innerHTML="";
+  }
+  clearMessageArea(exNum);
+}
+function clearMessageArea(exNum){
+  document.getElementById("messageArea"+exNum).innerHTML="";
+}
+// Optional JS Code for Click and Drop
+function makeClickedWord(exNum,x){
+  var txt=document.getElementById("ex"+exNum+"Word"+x).innerHTML;
+  clickedWord=txt;
+}
+function enterClickedWord(exNum,x){
+  var txt=clickedWord;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=txt;
+  clickedWord="";
+}
+function enterClickedWordCap(exNum,x){
+  var txt=clickedWord;
+  var firstLetter=txt.slice(0,1);
+  firstLetter=firstLetter.toUpperCase();
+  var rest=txt.slice(1,txt.length);
+  txt=firstLetter+rest;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=txt;
+  clickedWord="";
+}
+</script>    
+';
+//////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+//https://stackoverflow.com/questions/11817750/drag-and-drop-on-touchscreen
+
+$html .='
+<script>
+ function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "")) {
+    /* if present, the header is where you move the DIV from:*/
+    document.getElementById(elmnt.id + "").onmousedown = dragMouseDown;
+  } else {
+    /* otherwise, move the DIV from anywhere inside the DIV:*/
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the elements new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement(e) {
+    /* stop moving when mouse button is released:*/
+
+        for( let i=0; i< bub1.length; i++) {
+             
+                           //alert(bub1[i].x);
+                          //console.log(bub1[i]);
+             
+             let bubvals = Object.values(bub1[i]);
+             
+             let bubtop = parseInt(elmnt.style.top.replace(/\D/g, ""));
+             let bubleft = parseInt(elmnt.style.left.replace(/\D/g, ""));
+             let bubwidth = parseInt(elmnt.style.left.replace(/\D/g, "")) +parseInt(elmnt.style.width.replace(/\D/g, ""));
+             let bubheight = parseInt(elmnt.style.top.replace(/\D/g, "")) +parseInt(elmnt.style.height.replace(/\D/g, ""));
+             
+                         //console.log(elmnt.style.width,elmnt.style.width.replace(/\D/g, ""),parseInt(elmnt.style.width.replace(/\D/g, "")));
+              //console.log(bubtop,bubleft,bubwidth,bubheight);
+                           // alert(bubtop+"-"+bubleft+"-"+bubwidth+"-"+bubheight);
+
+             
+             if( bubvals[0] > bubleft && bubvals[1] > bubtop  )
+                {   
+                                      //  alert("hello1");
+                       if( bubvals[0] < bubwidth && bubvals[1] < bubheight){
+                       document.getElementById("ex1AnsBox"+i).value = elmnt.id.replace(/\D/g, "");
+                          //alert("hello2");
+                          console.log(bub1[i]);
+                          console.log(i);                          
+                       console.log(document.getElementById("ex1AnsBox"+i).value);
+                       }
+               } //if bubb
+ 
+        }
+
+     document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+ </script>
+';
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+$html .='
+<script>
+ function touchElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "")) {
+    /* if present, the header is where you move the DIV from:*/
+    document.getElementById(elmnt.id + "").ontouchstart = dragTouchDown;
+  } else {
+    /* otherwise, move the DIV from anywhere inside the DIV:*/
+    elmnt.ontouchstart = dragTouchDown;
+  }
+
+  function dragTouchDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX || e.targetTouches[0].clientX;
+    pos4 = e.clientY || e.targetTouches[0].clientY;
+    document.ontouchend = closeTouchElement;
+    // call a function whenever the cursor moves:
+    document.ontouchmove = elementTouch;
+  }
+
+  function elementTouch(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.targetTouches[0].clientX;
+    pos2 = pos4 - e.targetTouches[0].clientY;
+    pos3 = e.clientX || e.targetTouches[0].clientX;
+    pos4 = e.clientY || e.targetTouches[0].clientY;
+    // set the elements new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    //alert(elmnt.style.top);
+  }
+
+  function closeTouchElement(e) {
+    /* stop moving when mouse button is released:*/
+    
+      //var _x = e.touches[0].clientX;
+     //var _y = e.touches[0].clientY;
+     //alert(_x,_y);
+
+        for( let i=0; i< bub1.length; i++) {
+             
+                           //alert(bub1[i].x);
+                          //console.log(bub1[i]);
+             
+             let tbubvals = Object.values(bub1[i]);
+             
+             var tbubtop = parseInt(elmnt.style.top.replace(/^[0-9]*\.?[0-9]*$/g, ""));
+             var tbubleft = parseInt(elmnt.style.left.replace(/^[0-9]*\.?[0-9]*$/g, ""));
+             var tbubwidth = +parseInt(elmnt.style.left.replace(/^[0-9]*\.?[0-9]*$/g, "")) +parseInt(elmnt.style.width.replace(/^[0-9]*\.?[0-9]*$/g, ""));
+             var tbubheight = +parseInt(elmnt.style.top.replace(/^[0-9]*\.?[0-9]*$/g, "")) +parseInt(elmnt.style.height.replace(/^[0-9]*\.?[0-9]*$/g, ""));
+             
+              //console.log(elmnt.style.width,elmnt.style.width.replace(/\D/g, ""),parseInt(elmnt.style.width.replace(/\D/g, "")));
+           //alert(tbubtop+"-"+tbubheight+"-"+tbubleft+"-"+tbubwidth);
+              //alert(window.innerHeight+"-"+window.innerWidth);
+             
+             if( tbubvals[0] > tbubleft && tbubvals[1] > tbubtop  )
+                {   
+                                      //  alert("hello1");
+                       if( tbubvals[0] < tbubwidth && tbubvals[1] < tbubheight){
+                       document.getElementById("ex1AnsBox"+i).value = elmnt.id.replace(/\D/g, "");
+                          //alert("hello2");
+                          console.log(bub1[i]);
+                          console.log(i);                          
+                       console.log(document.getElementById("ex1AnsBox"+i).value);
+                       }
+               } //if bubb
+ 
+        }
+
+     document.ontouchend = null;
+    document.ontouchmove = null;
+  }
+}
+ </script>
+';
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+$html .='
+<style>
+#viewer {background-image: url(';
+//$html .= $_POST['hidurl'];
+$html .= 'http://riadaamericanschool.org/formmaker/livewstouch/'.$file;
+$html .= ');background-position: left top;background-repeat: no-repeat;height:1800px;width:1000px;margin:0px;padding:0px;}';
+
+
+for ($x = 1; $x < 50 ; $x++){
+$propsans= explode("^",$_POST["answer".$x]);
+ if($_POST["answer".$x]){
+$html .= '#answer'.$propsans[0].'  {border:solid 1px;position:absolute;left:'.$propswhi[1].';top:'.$propswhi[2].';width:'.$propsans[3].';height:'.$propsans[4].';background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/'.$file.');background-position:'.$propsans[6].';background-repeat:no-repeat;}   ';
+}
+}
+
+$html .='</style>
+</head>
+<body id="viewer">';
+
+$html .= '<form onsubmit="mySubmit(event)" action="http://riadaamericanschool.org/formmaker/livews/sendemail.php" method="post">
+<label for="css">Sheet Name: '.$_POST['frmname'].'</label><br>
+  <input type="hidden" id="css1" name="sheetname" value="'.$_POST['frmname'].'">
+  <label for="css2">Teacher Email: '.$_POST['usremail'].'</label><br>
+  <input type="hidden" id="css2" name="emailteacher" value="'.$_POST['usremail'].'">
+    <label for="css3">Student Name:</label>
+  <input type="text" id="css3" name="namestudent" placeholder="Enter Student Name" value="">
+      <label for="css4">Student Email:</label>
+  <input type="text" id="css4" name="emailstudent" placeholder="Enter Student Email" value="">
+
+';
+
+/////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////// (sizeof($_POST)-3)
+
+for ($x = 1; $x < 50  ; $x++){
+$props= explode("^",$_POST["dot".$x]);
+$propswhi= explode("^",$_POST["white".$x]);
+$propsans= explode("^",$_POST["answer".$x]);
+ if($_POST["dot".$x]){
+$html .= '<div  id="dot'.$props[0].'" style ="position:absolute;left:'.$props[1].';top:'.$props[2].';background:red;width:'.$props[3].';height:'.$props[4].';border-radius:5px;z-index : 1000; " ></div>    '; //'.$props[0].'
+}
+ if($_POST["white".$x]){
+$html .= '<div  id="white'.$propswhi[0].'" style ="border-style:dashed;background:whitesmoke;position:absolute;left:'.$propswhi[1].';top:'.$propswhi[2].';width:'.$propswhi[3].';height:'.$propswhi[4].'; " ></div>    ';
+}
+ if($_POST["answer".$x]){
+$html .= '<div draggable="true" id="answer'.$propsans[0].'" style ="border:solid 1px;position:absolute;left:'.$propswhi[1].';top:'.$propswhi[2].';width:'.$propswhi[3].';height:'.$propswhi[4].';background-image:url(http://riadaamericanschool.org/formmaker/livewstouch/'.$file.');background-position:'.$propsans[6].';background-repeat:no-repeat; " ></div>    ';//'.$propsans[0].'
+
+      
+$html .= '<input type="hidden" style="display:hidden;visibility:none;" id="ex1AnsBox'.($x-1).'" name="'.$x.'" size="5"  class="textBoxC" value="" />';
+
+$html .= '<script> dragElement(document.getElementById("answer'.$propsans[0].'")); </script>';
+$html .= '<script> touchElement(document.getElementById("answer'.$propsans[0].'")); </script>';
+}
+}
+////////////////////////////////////////////////
+$html .= '<div style="margin:10px 0;"><br><br>';
+
+if(!isset($_POST["vehicle1"])){$html .= '<input type="button" class="buttonC" value="Check" onclick="checkAnsBoxAnswersV2(ans1,1)"/>';}
+
+if(!isset($_POST["vehicle3"])){$html .= '<input type="button" class="buttonC" value="Clear" onclick="location.reload();return false;"/>';}//clearAnsBoxAnswersV2(ans1,1)
+
+$html .= ' <br><br><div id="messageArea1" style="position: relative;z-index:1000000;font-family:WindSong, cursive;font-size:300%;font-weight:bold;color:red;"></div></div>';
+///////////////////////////////////////////////////
+$html .= '</form>';
+$html .= '';
+
+$html .= '<script>function mySubmit(e){
+var grab = document.getElementById("css3");
+if (grab.value == ""){
+e.preventDefault();alert("Enter your name!"); return false;}
+}</script>';
+
+
+
+$html .= '
+</body>
+</html>
+';
+
+$file = 'file.html';
+file_put_contents($file, $html);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Live Worksheets</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+  
+<div class="container" style=" height: 1800px;width: 1250 px;">
+
+ <?php echo $html; ?> 
+
+
+  <div class="row">
+    <div class="col-sm-9">
+<!--<iframe src="./file.html" width=100% height=1500px ></iframe>-->
+    </div>
+    <div class="col-sm-3" style="display:sticky;">
+    <a href="./file.html" download>Click to download HTML file for webhosting</a>
+      <h3>Copy Embed Code Here</h3>
+<textarea rows=20 cols=40><?php echo $html; ?></textarea>
+<div></div>
+</div>
+
+  </div>
+</div>
+
+</body>
+</html>

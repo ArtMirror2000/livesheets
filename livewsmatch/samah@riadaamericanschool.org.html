@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Live Worksheets</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=WindSong&display=swap" rel="stylesheet">
+<style type="text/css">
+.instrC{
+color:gray;
+font-weight:bold;
+}
+.wordbox{
+border:solid gray 2px;
+margin:10px auto;
+padding:3px 5px;
+line-height:1.5;
+font-weight:bold;
+color:gray;
+padding:4px 10px;
+border-radius:15px;
+-moz-border-radius:15px;
+-webkit-border-radius:15px;
+-o-border-radius:15px;
+box-shadow:2px 2px 7px #333;
+-moz-box-shadow:2px 2px 7px #333;
+-webkit-box-shadow:2px 2px 7px #333;
+-o-box-shadow:2px 2px 7px #333;
+text-align:center;
+}
+.optionWord{
+color:gray;
+font-weight:bold;
+}
+.optionWord a{
+color:gray;
+text-decoration:none;
+}
+.optionWord a:hover{
+color:black;
+text-decoration:none;
+}
+.tdNumC{
+padding:0 7px 0 0px;
+color:gray;
+font-weight:bold;
+vertical-align:top;
+}
+.buttonC{
+background:gray;
+color:white;
+padding:2px 3px;
+font-weight:bold;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+-o-border-radius:5px;
+-moz-box-shadow:1px 1px 5px #333;
+-webkit-box-shadow:1px 1px 5px #333;
+-o-box-shadow:1px 1px 5px #333;
+margin:0 2px;
+}
+.textBoxC{
+border:none;
+border-bottom:1px dotted gray;
+}
+
+</style>
+<script type="text/javascript">
+var clickedWord="";
+ var ca=0;
+ var qlen=0;var ans1=["1","2","3","4","5","6","7","8"];
+function checkAnsBoxAnswersV2(ansCode,exNum){ 
+var grax = document.getElementById("css3");
+console.log("grax",grax);
+if (grax.value == ""){
+//e.preventDefault();
+//alert("Enter your name!"); 
+ document.getElementById("messageArea1").innerHTML="<span style=z-index:100000;color:red;font-weight:bold;>Enter your name!</span>";
+return false;
+}
+
+   ca=0;//alert("1");
+       var xlist = document.getElementsByClassName("textBoxC");
+    for (let i = 0; i < xlist.length; i++) {
+    ans1[i] = xlist[i].value ;
+     ansCode[i] = xlist[i].value ;
+     } 
+
+  for(var c=0;c<=ansCode.length;c++){
+    //var guess=doSpaces(exNum,c);
+    var ans="";//=doAnswers(guess,ansCode[c]);
+    if(ansCode[c] && ansCode[c]!=""){
+    if (c%2 == 0) {if(ansCode[c] == ansCode[c+1]) {ans="yes";ca++;}else{ans="no";}}
+    else{ if (ansCode[c] == ansCode[c-1]) {ans="yes";ca++;}else{ans="no";}}
+    }
+    if(ans=="yes"){
+     // document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+     // document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+     // ca++;
+    }
+    else{
+     // document.getElementById("ex"+exNum+"AnsBox"+c).style.background="orange" ;
+    } 
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+///////////////////////////
+///////////////////////////
+function checkAnsBoxInvisibleAnswersScoreV2(ansCode,exNum){
+   ca=0;alert("2");
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans;//=doAnswers(guess,ansCode[c]);
+    if (c%2 !=0) {if(ansCode[c] == ansCode[c-1]) {ans="yes";}else{ans="no";}}
+    else{ if (ansCode[c] == ansCode[c+1]) {ans="yes";}else{ans="no";}}
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(1);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else if(guess==""){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(3);
+    }
+    else{
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(2);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="red";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+function doAnswers(guess,ans){
+  if(guess==ans){
+    txt="yes";
+  }
+  else{
+    txt="no";
+  }
+  return txt;
+}
+function getInvisibleAnswersSign(x){
+  if(x==1){
+    var txt="<span style=color:green;font-weight:bold;>Y</span>";
+  }
+  else if(x==2){ 
+    var txt="<span style=font-size:100%;color:red;font-weight:bold;>X</span>";
+  }
+  else if(x==3){ 
+    var txt="<span style=font-size:100%;color:orange;font-weight:bold;>?</span>";
+  }
+  return txt  ;
+}
+function showScoreV2(ansCode,exNum,ca){
+  qlen=ansCode.length;
+  var pc=ca/qlen*100;
+  pc=Math.round(pc);                                                                                                                                                                                                                                                                   //  onclick="document.getElementById("clkform").submit()" ontouchend="document.getElementById("clkform").submit()" 
+  var txt="<span style=z-index:100000;color:red;font-weight:bold;>You have scored "+pc+" percent</span> <br> <span style=z-index:100000;color:red;font-weight:bold;font-size:250px> "+ca+"/"+qlen+" </span>";
+    document.getElementById("scoreipt").value=ca+"/"+qlen;   txt = txt+"<button onclick=document.getElementById('clkform').submit() ontouchend=document.getElementById( 'clkform').submit()  class=buttonC id=submit name=submit  value=Submit>Submit</button>  ";     document.getElementById("messageArea"+exNum).innerHTML=txt;
+}
+function doSpaces(exNum,qNum){
+  var txt=document.getElementById("ex"+exNum+"AnsBox"+qNum).value;
+  if(txt.charAt(txt.length-1)==" "){
+    txt=txt.slice(0,txt.length-1);
+    document.getElementById("ex"+exNum+"AnsBox"+qNum).value=txt;
+  }
+  return txt;
+}
+// JS Code for showing the answers
+function showAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  if(document.getElementById("ex"+exNum+"AnsBox"+c).value==ansCode[c]){
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+  }
+  else{
+    document.getElementById("ex"+exNum+"AnsBox"+c).value=ansCode[c];
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.background="orange";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+}
+// JS Code for clearing the answers
+function clearAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  //document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.background="lightgrey";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+  }
+  clearMessageArea(exNum);
+}
+function clearAnsBoxInvisibleAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+    //document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+    document.getElementById("ex"+exNum+"TickBox"+c).innerHTML="";
+  }
+  clearMessageArea(exNum);
+}
+function clearMessageArea(exNum){
+  document.getElementById("messageArea"+exNum).innerHTML="";
+}
+// Optional JS Code for Click and Drop
+function makeClickedWord(exNum,x){
+  var txt=document.getElementById("ex"+exNum+"Word"+x).innerHTML;
+  clickedWord=txt;
+}
+function enterClickedWord(exNum,x){
+  var txt=clickedWord;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=txt;
+  clickedWord="";
+}
+function enterClickedWordCap(exNum,x){
+  var txt=clickedWord;
+  var firstLetter=txt.slice(0,1);
+  firstLetter=firstLetter.toUpperCase();
+  var rest=txt.slice(1,txt.length);
+  txt=firstLetter+rest;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=txt;
+  clickedWord="";
+}
+</script>    
+
+<script>
+           
+///////////////////////////////////////////////////////////////////////////           
+           function myMoveScoreStart(tthis){
+     //////////////////////////////////////////////////////
+                        console.log(tthis);  
+                               
+             for( let i=0; i< 50; i++) {
+             
+             var xelement = document.getElementById("x"+i);
+             var yelement = document.getElementById("y"+i);
+             var welement = document.getElementById("w"+i);
+             var helement = document.getElementById("h"+i);
+             
+             if(xelement){
+                                     console.log(xelement);
+             var linetop = parseInt(tthis.style.top);
+             var lineleft = parseInt(tthis.style.left);
+             var linewidth = parseInt(tthis.style.left) ;
+             var lineheight = parseInt(tthis.style.top) ;
+             //console.log(linetop);
+             
+             var sqleft = parseInt(xelement.value);
+             var sqtop = parseInt(yelement.value);
+             var sqwidth = +parseInt(welement.value)+sqleft;
+             var sqheight = +parseInt(helement.value)+sqtop;
+
+             
+             //console.log(dleft);
+             //console.log(dtop);
+             //console.log(xelement.value);
+             //console.log(i);
+             
+                 if( sqleft < lineleft && sqtop < linetop  )
+                  {                  console.log("hello1");       
+                       if( sqwidth > linewidth && sqheight > lineheight){ console.log("hello2");
+                       let iix = i;
+                       document.getElementById("ex1AnsBox"+iix).value = tthis.id.substr(8);
+
+                       console.log(i);
+                       console.log(iix);
+                       console.log(tthis.id.substr(8));
+                       console.log(document.getElementById("ex1AnsBox"+iix).value);
+                                        
+                       }
+               } //if bubb
+ 
+               }//ifelem
+               }//for i
+      ///////////////////////////////////////////  
+               }
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+</script>
+            <script>
+           function myMoveScore(tthis){
+     //////////////////////////////////////////////////////
+           console.log(tthis);
+                      
+             for( let i=0; i< 50; i++) {
+             
+             var xelement = document.getElementById("x"+i);
+             var yelement = document.getElementById("y"+i);
+             var welement = document.getElementById("w"+i);
+             var helement = document.getElementById("h"+i);
+             
+             if(xelement){
+             var alms = tthis.align.split("^");
+
+             
+             var sqleft = parseInt(xelement.value);
+             var sqtop = parseInt(yelement.value);
+             var sqwidth = +parseInt(welement.value)+sqleft;
+             var sqheight = +parseInt(helement.value)+sqtop;
+             console.log(sqleft);
+             console.log(sqtop);
+             
+             
+                 if( sqleft < alms[0] && sqtop < alms[1]  )
+                  {                  
+                       console.log("helloppppppp");       
+                      // if( sqwidth > linewidth && sqheight > lineheight)
+                       if( sqwidth > alms[0] && sqheight > alms[1])
+                       { 
+                       console.log("helloqqqqq");
+                       let iix = i;
+                       document.getElementById("ex1AnsBox"+iix).value = tthis.id.substr(8);
+
+                       console.log(i);
+                       console.log(iix);
+                       console.log(tthis.id.substr(8));
+                       console.log(document.getElementById("ex1AnsBox"+iix).value);
+                                        
+                       }
+               } //if bubb
+ 
+               }//ifelem
+               }//for i
+      ///////////////////////////////////////////  
+               }
+     </script>    
+<style>
+#viewer {background-image: url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position: left top;background-repeat: no-repeat;height:1800px;width:1000px;margin:0px;padding:0px;}#answer1  {border:solid 1px;position:absolute;left:;top:;width:183;height:77;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-155px -428px;background-repeat:no-repeat;}   #answer2  {border:solid 1px;position:absolute;left:;top:;width:651;height:81;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-459px -633px;background-repeat:no-repeat;}   #answer3  {border:solid 1px;position:absolute;left:;top:;width:190;height:87;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-154px -525px;background-repeat:no-repeat;}   #answer4  {border:solid 1px;position:absolute;left:;top:;width:652;height:81;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-457px -734px;background-repeat:no-repeat;}   #answer5  {border:solid 1px;position:absolute;left:;top:;width:181;height:87;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-153px -627px;background-repeat:no-repeat;}   #answer6  {border:solid 1px;position:absolute;left:;top:;width:650;height:75;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-458px -433px;background-repeat:no-repeat;}   #answer7  {border:solid 1px;position:absolute;left:;top:;width:178;height:88;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-155px -726px;background-repeat:no-repeat;}   #answer8  {border:solid 1px;position:absolute;left:;top:;width:648;height:77;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-459px -528px;background-repeat:no-repeat;}   </style>
+</head>
+<body id="viewer" style="touch-action: none;">
+
+<div>
+<form id="clkform" onsubmit="mySubmit(event)" action="http://riadaamericanschool.org/formmaker/livewsmatch/sendemail.php" method="post">
+<label for="css">Sheet Name: G.4 Q.3 P.2</label><br>
+  <input type="hidden" id="css1" name="sheetname" value="G.4 Q.3 P.2">
+  <label for="css2">Teacher Email: samah@riadaamericanschool.org</label><br>
+  <input type="hidden" id="css2" name="emailteacher" value="samah@riadaamericanschool.org">
+    <label for="css3">Student Name:</label>
+  <input type="text" id="css3" name="namestudent" placeholder="Enter Student Name" value="">
+      <label for="css4">Student Email:</label>
+  <input type="text" id="css4" name="emailstudent" placeholder="Enter Student Email" value="">
+  <input type="hidden" id="scoreipt" name="score" value="">
+  </div><div >
+<script>
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+
+
+
+// Simulate an HTTP redirect:
+var refreshname = getCookie("refresh");
+if( refreshname.localeCompare("G.4 Q.3 P.2") == 0){
+window.location.replace("http://www.riadaamericanschool.org");
+}
+</script><div class="moveable"   
+id="answer1" style ="border:solid 1px;position:absolute;left:155px;top:428px;width:183px;height:77px;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-155px -428px;background-repeat:no-repeat; " ></div>    <input type="hidden" style="display:hidden;visibility:none;" id="ex1AnsBox0" name="1" size="5"  class="textBoxC" value="" /><div class="moveable"   
+id="answer2" style ="border:solid 1px;position:absolute;left:459px;top:633px;width:651px;height:81px;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-459px -633px;background-repeat:no-repeat; " ></div>    <input type="hidden" style="display:hidden;visibility:none;" id="ex1AnsBox1" name="2" size="5"  class="textBoxC" value="" /><div class="moveable"   
+id="answer3" style ="border:solid 1px;position:absolute;left:154px;top:525px;width:190px;height:87px;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-154px -525px;background-repeat:no-repeat; " ></div>    <input type="hidden" style="display:hidden;visibility:none;" id="ex1AnsBox2" name="3" size="5"  class="textBoxC" value="" /><div class="moveable"   
+id="answer4" style ="border:solid 1px;position:absolute;left:457px;top:734px;width:652px;height:81px;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-457px -734px;background-repeat:no-repeat; " ></div>    <input type="hidden" style="display:hidden;visibility:none;" id="ex1AnsBox3" name="4" size="5"  class="textBoxC" value="" /><div class="moveable"   
+id="answer5" style ="border:solid 1px;position:absolute;left:153px;top:627px;width:181px;height:87px;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-153px -627px;background-repeat:no-repeat; " ></div>    <input type="hidden" style="display:hidden;visibility:none;" id="ex1AnsBox4" name="5" size="5"  class="textBoxC" value="" /><div class="moveable"   
+id="answer6" style ="border:solid 1px;position:absolute;left:458px;top:433px;width:650px;height:75px;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-458px -433px;background-repeat:no-repeat; " ></div>    <input type="hidden" style="display:hidden;visibility:none;" id="ex1AnsBox5" name="6" size="5"  class="textBoxC" value="" /><div class="moveable"   
+id="answer7" style ="border:solid 1px;position:absolute;left:155px;top:726px;width:178px;height:88px;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-155px -726px;background-repeat:no-repeat; " ></div>    <input type="hidden" style="display:hidden;visibility:none;" id="ex1AnsBox6" name="7" size="5"  class="textBoxC" value="" /><div class="moveable"   
+id="answer8" style ="border:solid 1px;position:absolute;left:459px;top:528px;width:648px;height:77px;background-image:url(http://riadaamericanschool.org/formmaker/livewsmatch/images/1760297065.jpg);background-position:-459px -528px;background-repeat:no-repeat; " ></div>    <input type="hidden" style="display:hidden;visibility:none;" id="ex1AnsBox7" name="8" size="5"  class="textBoxC" value="" /><div style="z-index:55;margin:10px 0;"><br><br><input type="button" id="checker" class="buttonC" value="Check" onclick="checkAnsBoxAnswersV2(ans1,1);" ontouchend="checkAnsBoxAnswersV2(ans1,1);"/><input type="button" class="buttonC" value="Clear" onclick="location.reload();return false;" ontouchend="location.reload();return false;" /> <br><br><div id="messageArea1" style="position: relative;z-index:1000000;font-family:WindSong, cursive;font-size:300%;font-weight:bold;color:red;"></div></div></form>        <script>    
+        let isDrawing = false;
+         var circle;
+        var circctr =0;
+        var xxstart; var yystart;
+
+        var contxt =  document.getElementById("viewer");
+
+contxt.addEventListener("mousedown", e => {
+    if (event.button === 0) {
+    
+var myname = event.target.id.substring(0,4);
+    if (myname=="answ"){          
+  var locat = event.target.id.substring(6); 
+     if (document.getElementById("ex1AnsBox"+(locat-1)).value != "") {
+      let r = document.getElementById("ex1AnsBox"+(locat-1)).value;
+     document.getElementById("mycircle"+r).remove();
+     document.getElementById("ex1AnsBox"+(locat-1)).value != "";}
+      }     
+    if (myname=="myci"){
+  var locat = event.target.id.substring(8); //alert(locat);
+       document.getElementById(event.target.id).remove();
+    var xlist = document.getElementsByClassName("textBoxC");
+    for (let i = 0; i < xlist.length; i++) {
+      if (xlist[i].value == locat) { xlist[i].value = "";}
+     }
+  }
+        if (myname=="css3" || myname=="css4" ){
+      isDrawing = false;
+      return false;
+      }
+
+     
+isDrawing = true;
+                circctr++;
+           circle = document.createElement("div");
+              circle.id = "mycircle"+circctr;//
+              circle.style.position = "absolute";
+              circle.style.left = event.pageX+"px";
+              circle.style.top = event.pageY+"px";
+              circle.style.background = "red";                               
+             //circle.style.width = (10)+"px";
+             //circle.style.height = (10)+"px";
+             circle.style.borderRadius = "px";
+             circle.style.zIndex = 1000;     
+             //circle.transformOrigin: center;
+         xxstart  = (event.pageX-0);
+         yystart  = (event.pageY-0);   
+         //circle.style.transformOrigin= xxstart+"px"+" "+yystart+"px";
+         circle.style.transformOrigin= "0%"+" "+"0%";
+
+             var parent = document.getElementById("viewer");
+             parent.appendChild(circle);
+             
+     myMoveScoreStart(circle);
+  }
+});
+
+contxt.addEventListener("touchstart", e => {
+      event.preventDefault();
+  isDrawing = true;
+  
+var myname = event.target.id.substring(0,4);
+    if (myname=="answ"){          
+  var locat = event.target.id.substring(6); 
+     if (document.getElementById("ex1AnsBox"+(locat-1)).value != "") {
+      let r = document.getElementById("ex1AnsBox"+(locat-1)).value;
+     document.getElementById("mycircle"+r).remove();
+     document.getElementById("ex1AnsBox"+(locat-1)).value != "";}
+      }     
+    if (myname=="myci"){
+  var locat = event.target.id.substring(8); //alert(locat);
+       document.getElementById(event.target.id).remove();
+    var xlist = document.getElementsByClassName("textBoxC");
+    for (let i = 0; i < xlist.length; i++) {
+      if (xlist[i].value == locat) { xlist[i].value = "";}
+     }
+  }
+      if (myname=="css3" || myname=="css4" ){
+      isDrawing = false;
+      return false;
+      }
+                  circctr++;
+             circle = document.createElement("div");
+              circle.id = "mycircle"+circctr;//
+              circle.style.position = "absolute";
+              circle.style.left = event.changedTouches[0].pageX+"px";
+              circle.style.top = event.changedTouches[0].pageY+"px";
+              circle.style.background = "red";                               
+             //circle.style.width = (10)+"px";
+             //circle.style.height = (10)+"px";
+             circle.style.borderRadius = "px";
+             circle.style.zIndex = 1000;     
+             //circle.transformOrigin: center;
+         xxstart  = (event.changedTouches[0].pageX-0);
+         yystart  = (event.changedTouches[0].pageY-0);   
+         //circle.style.transformOrigin= xxstart+"px"+" "+yystart+"px";
+         circle.style.transformOrigin= "0%"+" "+"0%";
+
+             var parent = document.getElementById("viewer");
+             parent.appendChild(circle);
+    myMoveScoreStart(circle);
+}, false);
+
+contxt.addEventListener("mouseup", e => {
+    if (event.button === 0) {
+  isDrawing = false;
+  
+
+    myMoveScore(circle);     
+  }
+});
+
+contxt.addEventListener("touchend", e => {
+      event.preventDefault();
+  isDrawing = false;
+  
+   myMoveScore(circle);
+}, false);
+
+contxt.addEventListener("mousemove", function( event ) {
+
+    if (isDrawing == true) {
+    
+               var px = event.pageX;
+              var py = event.pageY;
+    
+              
+          var dline = document.getElementById("mycircle"+circctr);
+           dline.style.height = "5px";
+             let xoffset = px-xxstart;
+             let yoffset = py-yystart;
+             let xysum = +(xoffset**2)+(yoffset**2);
+             let hyp = Math.sqrt(xysum);
+             dline.style.width = hyp+"px";
+              
+             let rot = Math.asin(yoffset / hyp);
+             let rota = Math.ceil(rot* (180 / Math.PI));
+
+
+           if(px > xxstart){
+         dline.style.transform = "rotate("+rota+"deg)";}
+           else{rota=(+rota+180)*-1; dline.style.transform = "rotate("+rota+"deg)";}
+             
+              dline.align = px+"^"+py+"^"+rota;
+             var dparent = document.getElementById("viewer");
+             dparent.appendChild(dline);
+             
+
+
+}
+/////////////////////////////////////////////                        
+});
+
+
+contxt.addEventListener("touchmove", function( event ) {
+      event.preventDefault();
+    if (isDrawing == true) {
+
+                var px = event.changedTouches[0].pageX;
+              var py = event.changedTouches[0].pageY;
+    
+              
+              var dline = document.getElementById("mycircle"+circctr);
+           dline.style.height = "5px";
+             let xoffset = px-xxstart;
+             let yoffset = py-yystart;
+             let xysum = +(xoffset**2)+(yoffset**2);
+             let hyp = Math.sqrt(xysum);
+             dline.style.width = hyp+"px";
+
+             let rot = Math.asin(yoffset / hyp);
+             let rota = Math.ceil(rot* (180 / Math.PI));
+
+
+           if(px > xxstart){
+         dline.style.transform = "rotate("+rota+"deg)";}
+           else{rota=(+rota+180)*-1; dline.style.transform = "rotate("+rota+"deg)";}
+             
+             dline.align = px+"^"+py+"^"+rota;
+             var dparent = document.getElementById("viewer");
+             dparent.appendChild(dline);
+}
+/////////////////////////////////////////////                        
+}, false);
+</script>    <script>
+
+var sheetname = "G.4 Q.3 P.2";
+
+
+
+
+
+function mySubmit(){
+//alert("Enter your name!");
+var grab = document.getElementById("css3");
+var shtname = getCookie("sheetname");
+console.log(shtname);
+console.log(document.cookie);
+ if (shtname != "G.4 Q.3 P.2"){
+if (grab.value.localeCompare("") ==0){
+e.preventDefault();alert("Enter your name!"); return false;
+}
+
+document.cookie = "sheetname=G.4 Q.3 P.2"; 
+}
+else{e.preventDefault();alert("Already submitted!");return false;}
+}</script><div id="storage"></div><script>
+    var txtx = document.createElement("textarea");
+              txtx.id = "x0"
+              txtx.className = "storex";
+              txtx.style.display = "none";
+              txtx.value = 155; txtx.placeholder = 155;
+              //txtx.value = txtx.id;
+    var txty = document.createElement("textarea");
+              txty.id = "y0"
+              txty.className = "storey";              
+              txty.style.display = "none";
+              txty.value = 428; txty.placeholder = 428;
+    var txtw = document.createElement("textarea");
+              txtw.id = "w0"
+              txtw.className = "storew";              
+              txtw.style.display = "none";
+              txtw.value = 183;
+    var txth = document.createElement("textarea");
+              txth.id = "h0"
+              txth.className = "storeh";              
+              txth.style.display = "none";
+              txth.value = 77;
+     var parent = document.getElementById("storage");
+               parent.appendChild(txtx);
+               parent.appendChild(txty);
+               parent.appendChild(txtw);
+               parent.appendChild(txth);
+               
+    var txtx = document.createElement("textarea");
+              txtx.id = "x1"
+              txtx.className = "storex";
+              txtx.style.display = "none";
+              txtx.value = 459; txtx.placeholder = 459;
+              //txtx.value = txtx.id;
+    var txty = document.createElement("textarea");
+              txty.id = "y1"
+              txty.className = "storey";              
+              txty.style.display = "none";
+              txty.value = 633; txty.placeholder = 633;
+    var txtw = document.createElement("textarea");
+              txtw.id = "w1"
+              txtw.className = "storew";              
+              txtw.style.display = "none";
+              txtw.value = 651;
+    var txth = document.createElement("textarea");
+              txth.id = "h1"
+              txth.className = "storeh";              
+              txth.style.display = "none";
+              txth.value = 81;
+     var parent = document.getElementById("storage");
+               parent.appendChild(txtx);
+               parent.appendChild(txty);
+               parent.appendChild(txtw);
+               parent.appendChild(txth);
+               
+    var txtx = document.createElement("textarea");
+              txtx.id = "x2"
+              txtx.className = "storex";
+              txtx.style.display = "none";
+              txtx.value = 154; txtx.placeholder = 154;
+              //txtx.value = txtx.id;
+    var txty = document.createElement("textarea");
+              txty.id = "y2"
+              txty.className = "storey";              
+              txty.style.display = "none";
+              txty.value = 525; txty.placeholder = 525;
+    var txtw = document.createElement("textarea");
+              txtw.id = "w2"
+              txtw.className = "storew";              
+              txtw.style.display = "none";
+              txtw.value = 190;
+    var txth = document.createElement("textarea");
+              txth.id = "h2"
+              txth.className = "storeh";              
+              txth.style.display = "none";
+              txth.value = 87;
+     var parent = document.getElementById("storage");
+               parent.appendChild(txtx);
+               parent.appendChild(txty);
+               parent.appendChild(txtw);
+               parent.appendChild(txth);
+               
+    var txtx = document.createElement("textarea");
+              txtx.id = "x3"
+              txtx.className = "storex";
+              txtx.style.display = "none";
+              txtx.value = 457; txtx.placeholder = 457;
+              //txtx.value = txtx.id;
+    var txty = document.createElement("textarea");
+              txty.id = "y3"
+              txty.className = "storey";              
+              txty.style.display = "none";
+              txty.value = 734; txty.placeholder = 734;
+    var txtw = document.createElement("textarea");
+              txtw.id = "w3"
+              txtw.className = "storew";              
+              txtw.style.display = "none";
+              txtw.value = 652;
+    var txth = document.createElement("textarea");
+              txth.id = "h3"
+              txth.className = "storeh";              
+              txth.style.display = "none";
+              txth.value = 81;
+     var parent = document.getElementById("storage");
+               parent.appendChild(txtx);
+               parent.appendChild(txty);
+               parent.appendChild(txtw);
+               parent.appendChild(txth);
+               
+    var txtx = document.createElement("textarea");
+              txtx.id = "x4"
+              txtx.className = "storex";
+              txtx.style.display = "none";
+              txtx.value = 153; txtx.placeholder = 153;
+              //txtx.value = txtx.id;
+    var txty = document.createElement("textarea");
+              txty.id = "y4"
+              txty.className = "storey";              
+              txty.style.display = "none";
+              txty.value = 627; txty.placeholder = 627;
+    var txtw = document.createElement("textarea");
+              txtw.id = "w4"
+              txtw.className = "storew";              
+              txtw.style.display = "none";
+              txtw.value = 181;
+    var txth = document.createElement("textarea");
+              txth.id = "h4"
+              txth.className = "storeh";              
+              txth.style.display = "none";
+              txth.value = 87;
+     var parent = document.getElementById("storage");
+               parent.appendChild(txtx);
+               parent.appendChild(txty);
+               parent.appendChild(txtw);
+               parent.appendChild(txth);
+               
+    var txtx = document.createElement("textarea");
+              txtx.id = "x5"
+              txtx.className = "storex";
+              txtx.style.display = "none";
+              txtx.value = 458; txtx.placeholder = 458;
+              //txtx.value = txtx.id;
+    var txty = document.createElement("textarea");
+              txty.id = "y5"
+              txty.className = "storey";              
+              txty.style.display = "none";
+              txty.value = 433; txty.placeholder = 433;
+    var txtw = document.createElement("textarea");
+              txtw.id = "w5"
+              txtw.className = "storew";              
+              txtw.style.display = "none";
+              txtw.value = 650;
+    var txth = document.createElement("textarea");
+              txth.id = "h5"
+              txth.className = "storeh";              
+              txth.style.display = "none";
+              txth.value = 75;
+     var parent = document.getElementById("storage");
+               parent.appendChild(txtx);
+               parent.appendChild(txty);
+               parent.appendChild(txtw);
+               parent.appendChild(txth);
+               
+    var txtx = document.createElement("textarea");
+              txtx.id = "x6"
+              txtx.className = "storex";
+              txtx.style.display = "none";
+              txtx.value = 155; txtx.placeholder = 155;
+              //txtx.value = txtx.id;
+    var txty = document.createElement("textarea");
+              txty.id = "y6"
+              txty.className = "storey";              
+              txty.style.display = "none";
+              txty.value = 726; txty.placeholder = 726;
+    var txtw = document.createElement("textarea");
+              txtw.id = "w6"
+              txtw.className = "storew";              
+              txtw.style.display = "none";
+              txtw.value = 178;
+    var txth = document.createElement("textarea");
+              txth.id = "h6"
+              txth.className = "storeh";              
+              txth.style.display = "none";
+              txth.value = 88;
+     var parent = document.getElementById("storage");
+               parent.appendChild(txtx);
+               parent.appendChild(txty);
+               parent.appendChild(txtw);
+               parent.appendChild(txth);
+               
+    var txtx = document.createElement("textarea");
+              txtx.id = "x7"
+              txtx.className = "storex";
+              txtx.style.display = "none";
+              txtx.value = 459; txtx.placeholder = 459;
+              //txtx.value = txtx.id;
+    var txty = document.createElement("textarea");
+              txty.id = "y7"
+              txty.className = "storey";              
+              txty.style.display = "none";
+              txty.value = 528; txty.placeholder = 528;
+    var txtw = document.createElement("textarea");
+              txtw.id = "w7"
+              txtw.className = "storew";              
+              txtw.style.display = "none";
+              txtw.value = 648;
+    var txth = document.createElement("textarea");
+              txth.id = "h7"
+              txth.className = "storeh";              
+              txth.style.display = "none";
+              txth.value = 77;
+     var parent = document.getElementById("storage");
+               parent.appendChild(txtx);
+               parent.appendChild(txty);
+               parent.appendChild(txtw);
+               parent.appendChild(txth);
+               
+ </script> 
+</script>
+ <script type = "text/javascript" >  
+    function preventBack() { window.history.forward(); }  
+    setTimeout("preventBack()", 0);  
+    window.onunload = function () { null };  
+</script> 
+</body>
+</html>

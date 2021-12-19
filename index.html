@@ -1,0 +1,174 @@
+   <?
+   /////////////////////////////////////////////////////////////////////
+   /////////////////////////////////////////////////////////////////////
+   if ($_POST['lname'] == "submit") {
+   
+   $choList = array();
+   $Qlist = array();
+   
+   $rowcounter=-1;
+   $colcounter=0;
+      $linecounter=0;
+   $txt="";
+   
+   //echo $_POST['comment'];
+   
+   $choList = explode(PHP_EOL, $_POST['comment']);
+   
+   //print_r($choList);
+   
+   foreach($choList as $key => $value){
+   
+   if( $linecounter % ($_POST['quantity']+1) == 0 ) {$rowcounter ++; $colcounter=0;  }
+   
+   if(strlen($value)>1){$Qlist[$rowcounter][$key] = $value;$linecounter++;}
+   
+   $colcounter++;
+   
+   }//fe
+   
+    //print_r($Qlist);
+   
+   
+   
+     $txt .= "<table border=1><tr><th>Type</th><th>Description</th><th>Required</th><th>Other</th><th>Correct</th><th>Points</th><th>Question</th>";
+     for($x=1;$x<=$_POST['quantity'];$x++) {
+     $txt .= "<th>Answer ".$x."</th>";
+     }
+     $txt .= "</tr>";
+   
+   
+   foreach($Qlist as $key => $value){
+        $txt .= "<tr><td>MULTIPLE CHOICE</td><td>Think before you answer</td><td>TRUE</td><td></td><td>X</td><td>1</td>";
+      foreach($value as $k => $v){
+        if( $v ) {$txt .= "<td>".$v."</td>";}
+      }
+       $txt .= "</tr>";
+   }
+
+      $txt .= "</table>";
+
+   }//post
+   //////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////
+   /////////////////////////////////////////////////////////////////////
+   if ($_POST['lname2'] == "submit") {
+   
+   $choList = array();
+   $Qlist = array();
+   
+   $rowcounter=-1;
+   $colcounter=0;
+      $linecounter=0;
+   $txt="";
+   
+   //echo $_POST['comment'];
+   
+   $choList = explode(PHP_EOL, $_POST['comment']);
+   
+   //print_r($choList);
+   
+   foreach($choList as $key => $value){
+   
+   if( $linecounter % ($_POST['quantity2']+1) == 0 ) {$rowcounter ++; $colcounter=0;  }
+   
+   if(strlen($value)>1){$Qlist[$rowcounter][$key] = $value;$linecounter++;}
+   
+   $colcounter++;
+   
+   }//fe
+   
+    //print_r($Qlist);
+   
+   
+   
+     $txt .= "<table border=1><tr><th>Type</th><th>Description</th><th>Required</th><th>Other</th><th>Answer1</th><th>Answer 2</th><th>Points</th><th>Question</th>";
+     for($x=1;$x<=$_POST['quantity2'];$x++) {
+     $txt .= "<th>Correct ".$x."</th>";
+     }
+     $txt .= "</tr>";
+   
+   
+   foreach($Qlist as $key => $value){
+        $txt .= "<tr><td>Short Answer</td><td>Think before you answer</td><td>TRUE</td><td></td><td>X</td><td>Y</td><td>1</td>";
+      foreach($value as $k => $v){
+        if( $v ) {$txt .= "<td>".$v."</td>";}
+      }
+       $txt .= "</tr>";
+   }
+
+      $txt .= "</table>";
+
+   }//post
+   ////////////////////////////////////////////////////////////////////
+   ////////////////////////////////////////////////////////////////////
+   ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>RAS Form Maker</title>
+  <link rel='icon' href='fav.ico' type='image/ico' sizes='16x16'> 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <style>
+  body{background:linen;}
+  a {text-decoration:none;}
+  li { border-radius:15px;}
+  /*h4,li {background:#fff0f5;}*/
+  li:hover {background:whitesmoke;}
+  a:hover {
+  text-decoration:none;
+  background: whitesmoke;
+  color:navy;
+}
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+  
+<div class="container">
+
+        <div class="row">
+        
+<div class="text-center" style="border-style: solid 1px;">
+      <ol class="c list-group">
+<li class="list-group-item">  <h3>Online tools for creating Google Forms and Live Worksheets</h3></li>
+<br>  
+<li class="list-group-item">   
+<h5 style="color:red;display:inline;" ><b>In case of script errors with Google Forms: <br> Sign out of all Google Gmail accounts first to obtain authorization </b></h5> 
+                  <div style="text-align:center;display:inline;">             
+              <img  style="margin-top:-20px;" src="../video/error.jpeg" width=115px height=50px />
+              </div>   </li>
+
+
+
+ <li class="list-group-item">   <a href="https://script.google.com/macros/s/AKfycbwKPdQR2liiJCkGrEx_iANnV8bHVY1YYA3RnjtS1czgXmohyqyU/exec" ><h4>Google Forms Multiple Choice Importer</h4></a></li>
+       
+ <li class="list-group-item">   <a href="https://script.google.com/macros/s/AKfycbygokkj0bQTvO9TYjGDkEG0sP6eAalNBp9YiBW5cdk1g9aMMNU/exec" ><h4>Google Forms Short Answer Importer</h4></a></li>
+<br>
+            <li class="list-group-item">  <a href="/formmaker/exambuilder/index.html" ><h4>Test Builder for Worksheets </h4> </a> </li>
+ <br>   
+
+      
+ <li class="list-group-item">  <a href="/formmaker/livews/index.html" ><h4>Image-based Gapfiller </h4> </a> </li>
+      <li class="list-group-item">  <a href="/formmaker/livewsdropdown/index.html" ><h4>Image-based Drop Down </h4> </a> </li>
+  <br>           <li class="list-group-item">  <a href="/formmaker/livewsmatch/index.html" ><h4>Image-based Line Matching </h4> </a> </li> 
+ <br>   
+  <li class="list-group-item">  <a style="display:inline-block;" href="/formmaker/livewshybrid/index.html" ><h4>Image-based Pick-up and Drop </h4> </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a style="display:inline-block;" href="/formmaker/livewshybridvideo/index.html" ><h4>Image-based Pick-up and Drop with Youtube</h4> </a></li>
+
+  <li class="list-group-item">  <a style="display:inline-block;" href="/formmaker/livewsmcq/index.html" ><h4>Image-based MCQ </h4> </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style="display:inline-block;" href="/formmaker/livewsmcqvideo/index.html" ><h4>Image-based MCQ with Youtube </h4> </a></li>
+
+  <br>  
+ <li class="list-group-item">   <a href="/formmaker/gsiteclick/index.html" ><h4>Text-based Gapfiller Click and Drop </h4> </a></li>
+
+  </ol>
+</div>
+
+
+</div></div>
+</body>
+</html>

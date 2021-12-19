@@ -1,0 +1,83 @@
+   <?
+   
+   if ($_POST['lname'] == "submit") {
+   
+   $choList = array();
+   $txt="";
+   
+   //echo $_POST['comment'];
+   
+   $choList = explode(PHP_EOL, $_POST['comment']);
+   
+   foreach($choList as $key => $value){
+   
+  
+   if (strpos($value, '=100') !== false) {
+   
+
+   
+      if (strpos($value, 'A') !== false) { $choList[$key-3] = substr($choList[$key-3],0,-1); $choList[$key-3] .= "1"; }
+            if (strpos($value, 'B') !== false) {  $choList[$key-4] = substr($choList[$key-4],0,-1);$choList[$key-4] .= "2"; }
+                  if (strpos($value, 'C') !== false) {  $choList[$key-5] = substr($choList[$key-5],0,-1);$choList[$key-5] .= "3"; }
+                        if (strpos($value, 'D') !== false) {  $choList[$key-6] = substr($choList[$key-6],0,-1);$choList[$key-6] .= "4"; }
+                              if (strpos($value, 'E') !== false) {  $choList[$key-7] = substr($choList[$key-7],0,-1);$choList[$key-7] .= "5"; }
+   
+
+       }
+   
+   
+   
+   }//fe
+   
+      for ($x = 0; $x < sizeof($choList) ; $x++) {
+         $txt .= $choList[$x]."\n";
+      }
+   
+
+   }//post
+   
+   
+   ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>My First Bootstrap Page</h1>
+  <p>Resize this responsive page to see the effect!</p> 
+</div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Column 1</h3>
+                  <div style="display:table-cell;vertical-align: middle;">
+              <a target="_blank"  href="osr.apk" download="asr.apk" role="button">
+              <img width=80 height=80 src="and-logo.jpg" class="user-image img-responsive"/>
+              </a></div>   
+
+    </div>
+    <div class="col-sm-4">
+      <h3>Column 2</h3>
+<form action="/bsindex.html" id="usrform" method="post">
+<textarea name="comment"  rows=10 cols=40 ></textarea>
+  <input type="submit" id="lname" name="lname" value="submit" >
+</form>
+
+    </div>
+    <div class="col-sm-4">
+      <h3>Column 3</h3>        
+<textarea name="result"  rows=10 cols=40 ><? echo $txt;   ?></textarea>    </div>
+  </div>
+</div>
+
+</body>
+</html>
