@@ -1,0 +1,369 @@
+   <?
+   
+   if ($_POST['lname'] == "submit") {
+   
+   
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+$output .= '
+<?   
+//echo $_SERVER["HTTP_USER_AGENT"];
+$mobile="no";
+
+$iPod    = stripos($_SERVER["HTTP_USER_AGENT"],"iPod");
+$iPhone  = stripos($_SERVER["HTTP_USER_AGENT"],"iPhone");
+$iPad    = stripos($_SERVER["HTTP_USER_AGENT"],"iPad");
+$Android = stripos($_SERVER["HTTP_USER_AGENT"],"Android");
+$webOS   = stripos($_SERVER["HTTP_USER_AGENT"],"webOS");
+
+//do something with this information
+if( $iPod || $iPhone ){
+    $mobile="yes";
+}else if($iPad){
+    $mobile="no";
+}else if($Android){
+    $mobile="yes";
+}else if($webOS){
+    $mobile="no";
+}';
+$mobile1="";$mobile2="";$mobile3="";$mobile4="";$mobile5="";$mobile6="";
+if(isset($_POST["scroll1"])){$output .= '$mobile1 = "yes";';} else{$output .= '$mobile1 = $mobile;';}
+if(isset($_POST["scroll2"])){$output .= '$mobile2 = "yes";';} else{$output .= '$mobile2 = $mobile;';}
+if(isset($_POST["scroll3"])){$output .= '$mobile3 = "yes";';} else{$output .= '$mobile3 = $mobile;';}
+if(isset($_POST["scroll4"])){$output .= '$mobile4 = "yes";';} else{$output .= '$mobile4 = $mobile;';}
+if(isset($_POST["scroll5"])){$output .= '$mobile5 = "yes";';} else{$output .= '$mobile5 = $mobile;';}
+if(isset($_POST["scroll6"])){$output .= '$mobile6 = "yes";';} else{$output .= '$mobile6 = $mobile;';}
+$output .= '
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Live WS Test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<style>
+  iframe::-webkit-scrollbar {  
+    display: none;
+    scrollbar-width: none;  /* Firefox */
+  }  
+</style>
+
+<style>
+  body {background:'. $_POST["cars"].';color:'. $_POST["fontc"].';}
+  .jumbotron{  
+       margin-top:20px;
+       margin-left:15px;
+      border-radius:15px; 
+      box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.5);
+      background:'.$_POST["introc"].';
+   }
+  iframe {
+  margin:10px;
+      border-radius:15px; 
+    box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.5);
+    max-width:100%;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    background:lightgrey;
+  }
+  </style>
+  <style>
+/* width */
+iframe::-webkit-scrollbar, ::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+iframe::-webkit-scrollbar, ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+iframe::-webkit-scrollbar, ::-webkit-scrollbar-thumb {
+  background: red; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+iframe::-webkit-scrollbar, ::-webkit-scrollbar-thumb:hover {
+  background: #b30000; 
+}
+</style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + "px";
+  }
+</script>
+</head>
+<body xxxoncontextmenu="return false;" class=" text-center">
+
+
+  <div class="container text-center">
+  <div class="row">
+<div class="jumbotron text-center"> 
+<img src="http://riadaamericanschool.org/datawarehouse/assets/img/find_user.png" alt="" style="width:125px;height:125px;">
+<h1>'.$_POST["title"].'</h1>  <p>'.$_POST["stitle"].'</p>
+</div>';
+
+ 
+  if($_POST["page1"]){
+   $output .= '<div class="text-center" style="margin-left:15px;border: 1px solid; border-radius: 10px;width:auto;"> 
+   <h1>Section 1</h1>  
+      <p>Answer all the questions and fill in your name.</p> 
+   <p>Click Check-button to see your score.</p> 
+      <p>Click Submit-button to send your score to the teacher and view the "End" sign.</p> 
+            <p>Scroll down for the next section.</p> 
+   </div>
+   </div>
+   
+   <div class="row">
+    <iframe id="ifr"  oncontextmenu="return false;" scrolling="<? echo $mobile1; ?>" src='.$_POST["page1"].' width="'.$_POST["wquantity1"].'" height="'.$_POST["quantity1"].'" ></iframe>
+     </div>';
+     }
+     if($_POST["page2"]){  
+    $output .= '<div class="text-center" style="margin-left:15px;border: 1px solid; border-radius: 10px;width:auto;"> <h1>Section 2</h1>  
+      <p>Answer all the questions and fill in your name.</p> 
+   <p>Click Check-button to see your score.</p> 
+      <p>Click Submit-button to send your score to the teacher and view the "End" sign.</p> 
+            <p>Scroll down for the next section.</p> 
+    </div>
+    
+   <div class="row">
+    <iframe oncontextmenu="return false;" scrolling="<? echo $mobile2; ?>" src='.$_POST["page2"].' width="'.$_POST["wquantity2"].'"  height="'.$_POST["quantity2"].'" ></iframe>
+     </div>';
+     }
+       if($_POST["page3"]){
+    $output .= ' <div class="text-center" style="margin-left:15px;border: 1px solid; border-radius: 10px;width:auto;"> <h1>Section 3</h1>  
+      <p>Answer all the questions and fill in your name.</p> 
+   <p>Click Check-button to see your score.</p> 
+      <p>Click Submit-button to send your score to the teacher and view the "End" sign.</p> 
+            <p>Scroll down for the next section.</p> 
+    </div>
+    <div class="row">
+    <iframe oncontextmenu="return false;" scrolling="<? echo $mobile3; ?>" src='.$_POST["page3"].' width="'.$_POST["wquantity3"].'"  height="'.$_POST["quantity3"].'" ></iframe>
+     </div>';
+     }
+       if($_POST["page4"]){
+    $output .= '<div class="text-center" style="margin-left:15px;border: 1px solid; border-radius: 10px;width:auto;"> <h1>Section 4</h1>  
+      <p>Answer all the questions and fill in your name.</p> 
+   <p>Click Check-button to see your score.</p> 
+      <p>Click Submit-button to send your score to the teacher and view the "End" sign.</p> 
+            <p>Scroll down for the next section.</p> 
+    </div>
+   <div class="row">
+    <iframe oncontextmenu="return false;" scrolling="<? echo $mobile4; ?>" src='.$_POST["page4"].' width="'.$_POST["wquantity4"].'"  height="'.$_POST["quantity4"].'" ></iframe>
+     </div>';
+     }
+       if($_POST["page5"]){
+    $output .= '<div class="text-center" style="margin-left:15px;border: 1px solid; border-radius: 10px;width:auto;"> 
+
+    <h1>Section 5</h1>  
+      <p>Answer all the questions and fill in your name.</p> 
+   <p>Click Check-button to see your score.</p> 
+      <p>Click Submit-button to send your score to the teacher and view the "End" sign.</p> 
+            <p>Scroll down for the next section.</p> 
+
+    </div>
+   <div class="row">
+    <iframe oncontextmenu="return false;" scrolling="<? echo $mobile5; ?>" src='.$_POST["page5"].' width="'.$_POST["wquantity5"].'"  height="'.$_POST["quantity5"].'" ></iframe>
+     </div>';
+     }     
+            if($_POST["page6"]){
+    $output .= '<div class="text-center" style="margin-left:15px;border: 1px solid; border-radius: 10px;width:auto;"> <h1>Section 6</h1> 
+      <p>Answer all the questions and fill in your name.</p> 
+   <p>Click Check-button to see your score.</p> 
+      <p>Click Submit-button to send your score to the teacher and view the "End" sign.</p> 
+            <p>Scroll down for the next section.</p> 
+    </div>
+  <div class="row">
+    <iframe oncontextmenu="return false;" scrolling="<? echo $mobile6; ?>" src='.$_POST["page6"].' width="'.$_POST["wquantity6"].'"  height="'.$_POST["quantity6"].'" ></iframe>
+     </div>';
+     }
+     
+    $output .= '
+</div>
+<script>
+window.addEventListener("load", function () {
+//  alert("Hello!");
+
+//var list = document.getElementsByTagName("iframe");
+var list = document.getElementById("ifr");
+list.style.overflowY = "hidden";
+})
+</script>
+</body>
+</html>
+';
+     $output .= '';
+      $output .= '';
+       $output .= '';
+        $output .= '';
+
+$file = $_POST['usremail'].'.html';
+file_put_contents($file, $output);
+
+
+   }//if post
+   
+   //////////////////////////////////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////////////////////////////////
+   ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Test Builder</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <style>
+  input[type=checkbox] {
+    transform: scale(2);
+}
+textarea { border-radius: 5px;background-color:whitesmoke;}
+
+</style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + "px";
+  }
+</script>
+</head>
+<body>
+
+<div class="jumbotron text-center" style="background:#a4f72f;border-radius: 25px;">
+  <h2>Test Builder for Worksheets</h2>
+</div>
+  
+<div class="container">
+  <div class="row">
+
+
+    <div class="col-sm-6" style="background:#a4f72f;border-radius: 25px;">
+<form action="index.html" id="usrform" method="post">
+<br><br>
+      <div class="form-group">
+          <label for="usremail">Teacher Email</label>
+      <input type="text" class="form-control" id="usremail" name="usremail" value="<? echo $_POST["usremail"];?>" placeholder="Enter Teacher Email" required/>
+
+    <label for="title">Exam Title</label>
+    <input type="text" class="form-control" id="title" name="title" value="<? echo $_POST["title"];?>" required>
+    <label for="stitle">Exam Subtitle</label>
+    <input type="text" class="form-control" id="stitle" name="stitle" value="<? echo $_POST["stitle"];?>">
+</div>
+  <div class="form-group">
+  <label for="cars">Select intro color</label>
+  <select name="introc" id="introc">
+  <option value="<? echo $_POST["introc"];?>"><? echo $_POST["introc"];?></option>
+<?php include("colors.html"); ?>
+  </select>
+  </div>  
+  <div class="form-group">
+  <label for="cars">Select frame color</label>
+  <select name="cars" id="cars">
+  <option value="<? echo $_POST["cars"];?>"><? echo $_POST["cars"];?></option>
+<?php include("colors.html"); ?>
+  </select>
+  </div>  
+    <div class="form-group">
+  <label for="font">Select font color</label>
+  <select name="fontc" id="font">
+    <option value="<? echo $_POST["fontc"];?>"><? echo $_POST["fontc"];?></option>
+<?php include("colors.html"); ?>
+  </select>
+  </div>  
+  <div class="form-group">
+    <label for="page1">First Section</label>
+    <input type="text" class="form-control" id="page1" name="page1" value="<? echo $_POST["page1"];?>">
+  <label for="quantity">Section Height</label>
+  <input type="number" id="quantity1" name="quantity1" step="50" min="400" max="3600" value="<? echo $_POST["quantity1"];?>">
+  <label for="wquantity1">Section Width</label>
+  <input type="number" id="wquantity1" name="wquantity1" step="50" min="400" max="1800" value="<? echo $_POST["wquantity1"];?>">
+  <label for="scroll1"> Allow Scrolling</label> &nbsp;&nbsp;
+  <input type="checkbox" id="scroll1" name="scroll1" value="scroll">
+</div>
+    <div class="form-group">
+    <label for="page2">Second Section</label>
+    <input type="text" class="form-control" id="page2" name="page2" value="<? echo $_POST["page2"];?>">
+  <label for="quantity">Section Height</label>
+  <input type="number" id="quantity2" name="quantity2" step="50" min="400" max="3600" value="<? echo $_POST["quantity2"];?>">
+  <label for="wquantity2">Section Width</label>
+  <input type="number" id="wquantity2" name="wquantity2" step="50" min="400" max="1800" value="<? echo $_POST["wquantity2"];?>">
+  <label for="scroll2"> Allow Scrolling</label> &nbsp;&nbsp;
+  <input type="checkbox" id="scroll2" name="scroll2" value="scroll">
+
+</div>
+      <div class="form-group">
+    <label for="page3">Third Section</label>
+    <input type="text" class="form-control" id="page3" name="page3" value="<? echo $_POST["page3"];?>">
+  <label for="quantity">Section Height</label>
+  <input type="number" id="quantity3" name="quantity3" step="50" min="400" max="3600" value="<? echo $_POST["quantity3"];?>">
+  <label for="wquantity3">Section Width</label>
+  <input type="number" id="wquantity3" name="wquantity3" step="50" min="400" max="1800" value="<? echo $_POST["wquantity3"];?>">
+  <label for="scroll3"> Allow Scrolling</label> &nbsp;&nbsp;
+  <input type="checkbox" id="scroll3" name="scroll3" value="scroll">
+
+</div>
+      <div class="form-group">
+    <label for="page4">Fourth Section</label>
+    <input type="text" class="form-control" id="page4" name="page4" value="<? echo $_POST["page4"];?>">
+  <label for="quantity">Section Height</label>
+  <input type="number" id="quantity4" name="quantity4" step="50" min="400" max="3600" value="<? echo $_POST["quantity4"];?>">
+  <label for="wquantity4">Section Width</label>
+  <input type="number" id="wquantity4" name="wquantity4" step="50" min="400" max="1800" value="<? echo $_POST["wquantity4"];?>">
+  <label for="scroll4"> Allow Scrolling</label> &nbsp;&nbsp;
+  <input type="checkbox" id="scroll4" name="scroll4" value="scroll">
+
+</div>
+        <div class="form-group">
+    <label for="page5">Fifthd Section</label>
+    <input type="text" class="form-control" id="page5" name="page5" value="<? echo $_POST["page5"];?>">
+  <label for="quantity">Section Height</label>
+  <input type="number" id="quantity5" name="quantity5" step="50" min="400" max="3600" value="<? echo $_POST["quantity5"];?>">
+  <label for="wquantity5">Section Width</label>
+  <input type="number" id="wquantity5" name="wquantity5" step="50" min="400" max="1800" value="<? echo $_POST["wquantity5"];?>">
+  <label for="scroll5"> Allow Scrolling</label> &nbsp;&nbsp;
+  <input type="checkbox" id="scroll5" name="scroll5" value="scroll">
+
+</div>
+      <div class="form-group">
+    <label for="page4">Sixth Section</label>
+    <input type="text" class="form-control" id="page6" name="page6" value="<? echo $_POST["page6"];?>">
+  <label for="quantity">Section Height</label>
+  <input type="number" id="quantity6" name="quantity6" step="50" min="400" max="3600" value="<? echo $_POST["quantity6"];?>">
+  <label for="wquantity6">Section Width</label>
+  <input type="number" id="wquantity6" name="wquantity6" step="50" min="400" max="1800" value="<? echo $_POST["wquantity6"];?>">
+  <label for="scroll6"> Allow Scrolling</label> &nbsp;&nbsp;
+  <input type="checkbox" id="scroll6" name="scroll6" value="scroll">
+
+</div>
+ <h2> <input type="submit" id="lname" name="lname" value="submit" ></h2>
+</form>
+
+    </div>
+    <div class="col-sm-6" style="background:#87cc25;border-radius: 25px;">
+      <h3>Ouput File for GSite<br>
+<a href="<? echo $file; ?>" download>Click to download HTML file for webhosting</a>
+      </h3>        
+<textarea name="result"  rows=10 cols=80 class="form-control"><? echo $output;   ?></textarea>    
+      <h3>Preview</h3>        
+<!-- <div style="border:1px solid black;padding:5px;background:whitesmoke;"><? echo $output;   ?></div>-->
+<iframe src="<? echo $file; ?>" width="100%" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+<br>
+  </div>
+</div>
+</div>
+<br><br>
+<div class="jumbotron text-center" style="background:#a4f72f;border-radius: 25px;">
+
+
+
+</div>
+</body>
+</html>

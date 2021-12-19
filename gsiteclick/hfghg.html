@@ -1,0 +1,263 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Gapfiller</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=WindSong&display=swap" rel="stylesheet">
+<style type="text/css">
+.instrC{
+color:gray;
+font-weight:bold;
+}
+.wordbox{
+border:solid gray 2px;
+margin:10px auto;
+padding:3px 5px;
+line-height:1.5;
+font-weight:bold;
+color:gray;
+padding:4px 10px;
+border-radius:15px;
+-moz-border-radius:15px;
+-webkit-border-radius:15px;
+-o-border-radius:15px;
+box-shadow:2px 2px 7px #333;
+-moz-box-shadow:2px 2px 7px #333;
+-webkit-box-shadow:2px 2px 7px #333;
+-o-box-shadow:2px 2px 7px #333;
+text-align:center;
+}
+.optionWord{
+color:gray;
+font-weight:bold;
+}
+.optionWord a{
+color:gray;
+text-decoration:none;
+}
+.optionWord a:hover{
+color:black;
+text-decoration:none;
+}
+.tdNumC{
+padding:0 7px 0 0px;
+color:gray;
+font-weight:bold;
+vertical-align:top;
+}
+.buttonC{
+background:gray;
+color:white;
+padding:2px 3px;
+font-weight:bold;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+-o-border-radius:5px;
+-moz-box-shadow:1px 1px 5px #333;
+-webkit-box-shadow:1px 1px 5px #333;
+-o-box-shadow:1px 1px 5px #333;
+margin:0 2px;
+}
+.textBoxC{
+border:none;
+border-bottom:1px dotted gray;
+}
+</style>
+<script>function sbm(e){
+e.preventDefault(); return false;}
+</script>
+<script type="text/javascript">
+var clickedWord="";var ans1=["demure","austere","lucid","glib"];// JS Code for checking the answers
+function checkAnsBoxAnswersV2(ansCode,exNum){ 
+  var ca=0;
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans=doAnswers(guess,ansCode[c]);
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else{
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.color="red" ;
+    } 
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+function checkAnsBoxInvisibleAnswersScoreV2(ansCode,exNum){
+  var ca=0;
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans=doAnswers(guess,ansCode[c]);
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(1);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else if(guess==""){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(3);
+    }
+    else{
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(2);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="red";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+function doAnswers(guess,ans){
+  if(guess==ans){
+    txt="yes";
+  }
+  else{
+    txt="no";
+  }
+  return txt;
+}
+function getInvisibleAnswersSign(x){
+  if(x==1){
+    var txt="<span style=color:green;font-weight:bold;>Y</span>";
+  }
+  else if(x==2){ 
+    var txt="<span style=font-size:100%;color:red;font-weight:bold;>X</span>";
+  }
+  else if(x==3){ 
+    var txt="<span style=font-size:100%;color:orange;font-weight:bold;>?</span>";
+  }
+  return txt  ;
+}
+function showScoreV2(ansCode,exNum,ca){
+  var qlen=ansCode.length;
+  var pc=ca/qlen*100;
+  pc=Math.round(pc);
+  var txt="<span style=color:red;font-weight:bold;>You have scored "+pc+" percent</span> <br> <span style=color:red;font-weight:bold;font-size:250px> "+ca+"/"+qlen+" </span><input type=hidden id=score name=score value="+ca+"/"+qlen+"><input type=submit id=submit name=submit  value=Submit>  ";
+  document.getElementById("messageArea"+exNum).innerHTML=txt;
+}
+function doSpaces(exNum,qNum){
+  var txt=document.getElementById("ex"+exNum+"AnsBox"+qNum).value;
+  if(txt.charAt(txt.length-1)==" "){
+    txt=txt.slice(0,txt.length-1);
+    document.getElementById("ex"+exNum+"AnsBox"+qNum).value=txt;
+  }
+  return txt;
+}
+// JS Code for showing the answers
+function showAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  if(document.getElementById("ex"+exNum+"AnsBox"+c).value==ansCode[c]){
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+  }
+  else{
+    document.getElementById("ex"+exNum+"AnsBox"+c).value=ansCode[c];
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.background="orange";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+}
+// JS Code for clearing the answers
+function clearAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.background="white";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+  }
+  clearMessageArea(exNum);
+}
+function clearAnsBoxInvisibleAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+    document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+    document.getElementById("ex"+exNum+"TickBox"+c).innerHTML="";
+  }
+  clearMessageArea(exNum);
+}
+function clearMessageArea(exNum){
+  document.getElementById("messageArea"+exNum).innerHTML="";
+}
+// Optional JS Code for Click and Drop
+function makeClickedWord(exNum,x){
+  var tyt=document.getElementById("ex"+exNum+"Word"+x).innerHTML;
+  //  alert(tyt);
+  clickedWord=tyt;
+}
+function enterClickedWord(exNum,x){
+  var tzt=clickedWord;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=tzt;
+  //alert(document.getElementById("ex"+exNum+"AnsBox"+x).value);
+  clickedWord="";
+}
+function enterClickedWordCap(exNum,x){
+  var txt=clickedWord;
+  var firstLetter=txt.slice(0,1);
+  firstLetter=firstLetter.toUpperCase();
+  var rest=txt.slice(1,txt.length);
+  txt=firstLetter+rest;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=txt;
+  clickedWord="";
+}
+</script>    
+</head>
+<body>
+<div><script>
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+
+
+
+// Simulate an HTTP redirect:
+var refreshname = getCookie("refresh");
+console.log(refreshname);
+if( refreshname.localeCompare("fgh") == 0){
+window.location.replace("http://www.riadaamericanschool.org");
+}
+</script><form onsubmit="mySubmit(event)" action="http://riadaamericanschool.org/formmaker/gsiteclick/sendemail.php" method="post">
+<label for="css">Sheet Name: fgh</label><br>
+  <input type="hidden" id="css1" name="sheetname" value="fgh">
+  <label for="css2">Teacher Email: hfghg</label><br>
+  <input type="hidden" id="css2" name="emailteacher" value="hfghg">
+    <label for="css3">Student Name:</label>
+  <input type="text" id="css3" name="namestudent" placeholder="Enter Student Name" value="">
+      <label for="css4">Student Email:</label>
+  <input type="text" id="css4" name="emailstudent" placeholder="Enter Student Email" value="">
+
+<h2 style="text-align:center;margin:20px auto;font-family:arial;font-size:18px;"><span class="instrC">fgh</span></h2><div id="wordBox" class="wordbox" style="margin:10px 0;font-size:20px;"><div id="wordBox" class="wordbox" style="margin:10px 0;"><span class="optionWord"><label onclick="javascript:makeClickedWord(1,0)" ontouchstart="javascript:makeClickedWord(1,0)" ><span id="ex1Word0">austere</span></label></span> &nbsp; · &nbsp;<span class="optionWord"><label onclick="javascript:makeClickedWord(1,1)" ontouchstart="javascript:makeClickedWord(1,1)" ><span id="ex1Word1">demure</span></label></span> &nbsp; · &nbsp;<span class="optionWord"><label onclick="javascript:makeClickedWord(1,2)" ontouchstart="javascript:makeClickedWord(1,2)" ><span id="ex1Word2">glib</span></label></span> &nbsp; · &nbsp;<span class="optionWord"><label onclick="javascript:makeClickedWord(1,3)" ontouchstart="javascript:makeClickedWord(1,3)" ><span id="ex1Word3">lucid</span></label></span> &nbsp; · &nbsp;<div style="margin:10px 0;" class="noprint"><span style="font-weight:bold"><span style="color:red;">Click and Drop</span></span> <span class="optionWord">click on a word or phrase in the box above and then on the appropriate gap.</span></div></div><div style="font-family:arial;font-size:20px;"><br><br>Jenny is the <input style="width:80px;line-height:30px;font-size:20px;" autocomplete="off" class="textBoxC" value="" type="text" id="ex1AnsBox0" onclick="enterClickedWord(1,0)"> one, always quiet and unassuming, too unassuming I would say: sometimes her outfit can border on the <input style="width:80px;line-height:30px;font-size:20px;" autocomplete="off" class="textBoxC" value="" type="text" id="ex1AnsBox1" onclick="enterClickedWord(1,1)"> - plain wool skirt and white blouse - you know the sort of thing. But I'll say one thing for her, even after a few drinks she always remains perfectly <input style="width:80px;line-height:30px;font-size:20px;" autocomplete="off" class="textBoxC" value="" type="text" id="ex1AnsBox2" onclick="enterClickedWord(1,2)"> , when the rest of us are all mumbling incoherent nonsense. Tammy can be very insensitive with her <input style="width:80px;line-height:30px;font-size:20px;" autocomplete="off" class="textBoxC" value="" type="text" id="ex1AnsBox3" onclick="enterClickedWord(1,3)"> remarks about Jenny's total lack of fashion sense. But they are like water off a duck's back to Jenny.</div><div style="margin:10px 0;"><br><br><input type="button" class="buttonC" value="Check" onclick="checkAnsBoxAnswersV2(ans1,1)"/><input type="button" class="buttonC" value="Show" onclick="showAnsBoxAnswersV2(ans1,1)"/><input type="button" id="checker" class="buttonC" value="Clear" onclick="clearAnsBoxAnswersV2(ans1,1)"/> <br><br><span id="messageArea1" style="font-family:WindSong, cursive;font-size:300%;font-weight:bold;color:red;">
+</span>
+</div></form><script>
+var sheetname = "fgh";
+function mySubmit(e){
+var grab = document.getElementById("css3");
+var shtname = getCookie("sheetname");
+ if (shtname != "fgh"){
+if (grab.value == ""){
+e.preventDefault();alert("Enter your name!"); return false;}
+document.cookie = "sheetname=fgh"; 
+}
+else{e.preventDefault();alert("Already submitted!");return false;}
+}</script>
+ <script type = "text/javascript" >  
+    function preventBack() { window.history.forward(); }  
+    setTimeout("preventBack()", 0);  
+    window.onunload = function () { null };  
+</script> 
+</div>
+</body></html>

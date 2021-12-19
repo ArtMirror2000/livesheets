@@ -1,0 +1,480 @@
+   <?
+   
+   if ($_POST['lname'] == "submit") {
+   
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+   $_POST['oldcomment'] = $_POST['comment'];
+ if(isset($_POST["math"])){  $_POST['comment'] = str_replace(" ", "<label>&nbsp;</label>", $_POST['comment']);}
+
+   
+   //echo $_POST['comment'];
+   //   if (strpos($value, '=100') !== false) {   
+   //$choList = explode(PHP_EOL, $_POST['comment']);   
+   //foreach($choList as $key => $value){  
+   /// echo $value."-";   
+   //}//fe
+   
+   //$text = '[This] is a [test] string, [eat] my [shorts].';
+   preg_match_all("/\[[^\]]*\]/", $_POST['comment'], $withbrackets);
+ // var_dump($withbrackets[0]);
+
+ //  echo"<br>";
+
+   //$text = '[This] is a [test] string, [eat] my [shorts].';
+   preg_match_all("/\[([^\]]*)\]/", $_POST['comment'], $nobrackets);
+  // var_dump($nobrackets[1]);
+  //    echo"<br>";
+   
+   //$phrase  = "You should eat fruits, vegetables, and fiber every day.";
+    //$healthy = ["fruits", "vegetables", "fiber"];
+    //$yummy   = ["pizza", "beer", "ice cream"];
+    //$yummy = "nothing";
+    //<input style="width: 80px;" class="textBoxC" type="text" id="ex1AnsBox0">
+    // <span class="optionWord">maudlin</span> &nbsp; · &nbsp;
+    ////var ans1=["demure","austere","lucid","glib","cavalier","caustic","lurid","volatile","stoic","maudlin"];
+
+      $ctr=-1;
+     foreach($withbrackets[0] as $key => $value){  
+     $ctr++;
+     $yummy[] = '<input style="width:80px;line-height:'.($_POST["fsize"]+10).'px;font-size:'.($_POST["fsize"]).'px;" autocomplete="off" class="textBoxC" value="" type="text" id="ex1AnsBox'.$key.'" onclick="enterClickedWord(1,'.$key.')">';
+     }
+     $newtext = str_replace($withbrackets[0], $yummy, $_POST['comment']);
+     // echo $newtext;
+     //print_r($yummy);
+     
+      
+      $anslist ='var ans1=[';
+      foreach($nobrackets[1] as $key => $value){  
+      $anslist .='"'.$value.'",';
+      }
+      $anslist  = substr($anslist,0,-1);
+      $anslist .='];';
+     // echo $anslist;
+     
+/////////////////////////////////////////////////////////////   
+           shuffle($nobrackets[1]);
+     $wordlist = '<div id="wordBox" class="wordbox" style="margin:10px 0;">';
+      foreach($nobrackets[1] as $key => $value){  
+      $wordlist .='<span class="optionWord"><label onclick="javascript:makeClickedWord(1,'.$key.')" ontouchstart="javascript:makeClickedWord(1,'.$key.')" ><span id="ex1Word'.$key.'">'.$value.'</span></label></span> &nbsp; · &nbsp;';
+      }
+      $wordlist .='<div style="margin:10px 0;" class="noprint"><span style="font-weight:bold"><span style="color:red;">Click and Drop</span></span> <span class="optionWord">click on a word or phrase in the box above and then on the appropriate gap.</span></div>';
+      
+//////////////////////////////////////////////////////////// 
+/*
+      shuffle($nobrackets[1]);
+            $wordlist = "";
+     foreach($nobrackets[1] as $key => $value){  
+      $wordlist .='<span class="optionWord">'.$value.'</span> &nbsp; · &nbsp;';
+     }
+
+         //  echo $wordlist;
+ */        
+///////////////////////////////////////////////////////////////         
+         
+         
+         $newtext = str_replace("\n", "<br>", $newtext);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      $output = '<!DOCTYPE HTML>
+<html>
+<head>
+<title>Gapfiller</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=WindSong&display=swap" rel="stylesheet">
+<style type="text/css">
+.instrC{
+color:gray;
+font-weight:bold;
+}
+.wordbox{
+border:solid gray 2px;
+margin:10px auto;
+padding:3px 5px;
+line-height:1.5;
+font-weight:bold;
+color:gray;
+padding:4px 10px;
+border-radius:15px;
+-moz-border-radius:15px;
+-webkit-border-radius:15px;
+-o-border-radius:15px;
+box-shadow:2px 2px 7px #333;
+-moz-box-shadow:2px 2px 7px #333;
+-webkit-box-shadow:2px 2px 7px #333;
+-o-box-shadow:2px 2px 7px #333;
+text-align:center;
+}
+.optionWord{
+color:gray;
+font-weight:bold;
+}
+.optionWord a{
+color:gray;
+text-decoration:none;
+}
+.optionWord a:hover{
+color:black;
+text-decoration:none;
+}
+.tdNumC{
+padding:0 7px 0 0px;
+color:gray;
+font-weight:bold;
+vertical-align:top;
+}
+.buttonC{
+background:gray;
+color:white;
+padding:2px 3px;
+font-weight:bold;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+-o-border-radius:5px;
+-moz-box-shadow:1px 1px 5px #333;
+-webkit-box-shadow:1px 1px 5px #333;
+-o-box-shadow:1px 1px 5px #333;
+margin:0 2px;
+}
+.textBoxC{
+border:none;
+border-bottom:1px dotted gray;
+}
+</style>
+<script>function sbm(e){
+e.preventDefault(); return false;}
+</script>
+<script type="text/javascript">
+var clickedWord="";';
+
+//var ans1=["demure","austere","lucid","glib","cavalier","caustic","lurid","volatile","stoic","maudlin"];
+    $output .= $anslist;
+
+      $output .= '// JS Code for checking the answers
+function checkAnsBoxAnswersV2(ansCode,exNum){ ';
+
+//if(!isset($_POST["vehicle111"])){$output .= ' document.getElementById("checker").style.display="none"; ';}
+
+$output .= '
+  var ca=0;
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans=doAnswers(guess,ansCode[c]);
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else{
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.color="red" ;
+    } 
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+function checkAnsBoxInvisibleAnswersScoreV2(ansCode,exNum){
+  var ca=0;
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans=doAnswers(guess,ansCode[c]);
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(1);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else if(guess==""){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(3);
+    }
+    else{
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(2);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="red";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+function doAnswers(guess,ans){
+  if(guess==ans){
+    txt="yes";
+  }
+  else{
+    txt="no";
+  }
+  return txt;
+}
+function getInvisibleAnswersSign(x){
+  if(x==1){
+    var txt="<span style=color:green;font-weight:bold;>Y</span>";
+  }
+  else if(x==2){ 
+    var txt="<span style=font-size:100%;color:red;font-weight:bold;>X</span>";
+  }
+  else if(x==3){ 
+    var txt="<span style=font-size:100%;color:orange;font-weight:bold;>?</span>";
+  }
+  return txt  ;
+}
+function showScoreV2(ansCode,exNum,ca){
+  var qlen=ansCode.length;
+  var pc=ca/qlen*100;
+  pc=Math.round(pc);
+  var txt="<span style=color:red;font-weight:bold;>You have scored "+pc+" percent</span> <br> <span style=color:red;font-weight:bold;font-size:250px> "+ca+"/"+qlen+" </span><input type=hidden id=score name=score value="+ca+"/"+qlen+"><input type=submit id=submit name=submit  value=Submit>  ";
+  document.getElementById("messageArea"+exNum).innerHTML=txt;
+}
+function doSpaces(exNum,qNum){
+  var txt=document.getElementById("ex"+exNum+"AnsBox"+qNum).value;
+  if(txt.charAt(txt.length-1)==" "){
+    txt=txt.slice(0,txt.length-1);
+    document.getElementById("ex"+exNum+"AnsBox"+qNum).value=txt;
+  }
+  return txt;
+}
+// JS Code for showing the answers
+function showAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  if(document.getElementById("ex"+exNum+"AnsBox"+c).value==ansCode[c]){
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+  }
+  else{
+    document.getElementById("ex"+exNum+"AnsBox"+c).value=ansCode[c];
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.background="orange";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+}
+// JS Code for clearing the answers
+function clearAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.background="white";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+  }
+  clearMessageArea(exNum);
+}
+function clearAnsBoxInvisibleAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+    document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+    document.getElementById("ex"+exNum+"TickBox"+c).innerHTML="";
+  }
+  clearMessageArea(exNum);
+}
+function clearMessageArea(exNum){
+  document.getElementById("messageArea"+exNum).innerHTML="";
+}
+// Optional JS Code for Click and Drop
+function makeClickedWord(exNum,x){
+  var tyt=document.getElementById("ex"+exNum+"Word"+x).innerHTML;
+  //  alert(tyt);
+  clickedWord=tyt;
+}
+function enterClickedWord(exNum,x){
+  var tzt=clickedWord;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=tzt;
+  //alert(document.getElementById("ex"+exNum+"AnsBox"+x).value);
+  clickedWord="";
+}
+function enterClickedWordCap(exNum,x){
+  var txt=clickedWord;
+  var firstLetter=txt.slice(0,1);
+  firstLetter=firstLetter.toUpperCase();
+  var rest=txt.slice(1,txt.length);
+  txt=firstLetter+rest;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=txt;
+  clickedWord="";
+}
+</script>    
+</head>
+<body>
+<div>';
+
+////////////////
+$output .='<script>
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+
+
+
+// Simulate an HTTP redirect:
+var refreshname = getCookie("refresh");
+console.log(refreshname);
+if( refreshname.localeCompare("'.$_POST['title'].'") == 0){
+window.location.replace("http://www.riadaamericanschool.org");
+}
+</script>';
+/////////////////////////////////////////////////////////////
+if(!isset($_POST["vehicle111"])){
+$output .='<script>
+document.cookie = "refresh='.$_POST['title'].'"; 
+</script>';
+}
+//////////////////////////////////////////////////
+
+$output .= '<form onsubmit="mySubmit(event)" action="http://riadaamericanschool.org/formmaker/gsiteclick/sendemail.php" method="post">
+<label for="css">Sheet Name: '.$_POST['title'].'</label><br>
+  <input type="hidden" id="css1" name="sheetname" value="'.$_POST['title'].'">
+  <label for="css2">Teacher Email: '.$_POST['email'].'</label><br>
+  <input type="hidden" id="css2" name="emailteacher" value="'.$_POST['email'].'">
+    <label for="css3">Student Name:</label>
+  <input type="text" id="css3" name="namestudent" placeholder="Enter Student Name" value="">
+      <label for="css4">Student Email:</label>
+  <input type="text" id="css4" name="emailstudent" placeholder="Enter Student Email" value="">
+
+';
+
+
+ $output .= '<h2 style="text-align:center;margin:20px auto;font-family:arial;font-size:18px;"><span class="instrC">'.$_POST['title'].'</span></h2>';
+
+ $output .= '<div id="wordBox" class="wordbox" style="margin:10px 0;font-size:'.$_POST["fsize"].'px;">';
+ 
+ if(isset($_POST["options"])){   $output .= $wordlist;}
+
+ 
+  $output .= '</div><div style="font-family:arial;font-size:'.$_POST["fsize"].'px;"><br><br>';
+   $output .= $newtext;
+    $output .= '</div><div style="margin:10px 0;"><br><br>';
+if(isset($_POST["vehicle1"])){$output .= '<input type="button" class="buttonC" value="Check" onclick="checkAnsBoxAnswersV2(ans1,1)"/>';}
+if(isset($_POST["vehicle2"])){$output .= '<input type="button" class="buttonC" value="Show" onclick="showAnsBoxAnswersV2(ans1,1)"/>';}
+if(isset($_POST["vehicle3"])){$output .= '<input type="button" id="checker" class="buttonC" value="Clear" onclick="clearAnsBoxAnswersV2(ans1,1)"/>';}
+$output .= ' <br><br><span id="messageArea1" style="font-family:WindSong, cursive;font-size:300%;font-weight:bold;color:red;">
+</span>
+</div>';
+
+$output .= '</form><script>
+var sheetname = "'.$_POST['title'].'";
+function mySubmit(e){
+var grab = document.getElementById("css3");
+var shtname = getCookie("sheetname");
+ if (shtname != "'.$_POST['title'].'"){
+if (grab.value == ""){
+e.preventDefault();alert("Enter your name!"); return false;}
+document.cookie = "sheetname='.$_POST['title'].'"; 
+}
+else{e.preventDefault();alert("Already submitted!");return false;}
+}</script>
+ <script type = "text/javascript" >  
+    function preventBack() { window.history.forward(); }  
+    setTimeout("preventBack()", 0);  
+    window.onunload = function () { null };  
+</script> 
+</div>
+</body></html>';
+     $output .= '';
+      $output .= '';
+       $output .= '';
+        $output .= '';
+
+$file = $_POST['email'].'.html';
+file_put_contents($file, $output);
+
+
+   }//if post
+   
+   //////////////////////////////////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////////////////////////////////
+   //////////////////////////////////////////////////////////////////////////////////////////////////////
+   ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>GSite Quiz Builder</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <style>
+  input[type=checkbox] {
+    transform: scale(2);
+}
+textarea { border-radius: 5px;background-color:whitesmoke;}
+</style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="jumbotron text-center" style="background:#a4f72f;border-radius: 25px;">
+  <h2>Digital Sheet Builder with Click and Drop</h2>
+  <p> DO NOT REPEAT ANSWER OPTIONS</p> 
+  <p> SHEET TITLE MUST BE UNIQUE</p> 
+</div>
+  
+<div class="container">
+  <div class="row">
+
+
+    <div class="col-sm-6" style="background:#a4f72f;border-radius: 25px;">
+<form action="index.html" id="usrform" method="post">
+<h3>Worksheet Title</h3>
+<textarea name="title"  rows=1 cols=80 class="form-control" required><? echo $_POST['title'];   ?></textarea><br>
+<h3>Teacher Email</h3>
+<textarea name="email"  rows=1 cols=80 class="form-control" required><? echo $_POST['email'];   ?></textarea><br>
+<input type="checkbox" id="vehicle111" name="vehicle111" value="f111" checked>
+<label for="vehicle111"> &nbsp;&nbsp;&nbsp;&nbsp;Allow Page Refresh</label><br><br>
+
+  <input type="checkbox" id="math" name="math" value="math" >
+  <label for="vehicle1"> &nbsp;&nbsp;&nbsp;&nbsp;Increase Spacing</label>
+<br><br>
+
+<label for="quantity">Font size:</label>
+<input type="number" class="form-control" id="fsize" name="fsize" min="15" max="50" value="<? echo $_POST["fsize"];   ?>" required><br> 
+
+  <input type="checkbox" class="xlarge" id="options" name="options" value="Boat" checked>
+  <label for="vehicle3"> &nbsp;&nbsp;&nbsp;&nbsp;Display list of options</label><br><br>
+      <h3>Worksheet Body Text</h3>
+<textarea name="comment"  rows=10 cols=80 class="form-control" required><? echo $_POST['oldcomment'];   ?></textarea><br><br>
+  <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" checked>
+  <label for="vehicle1"> &nbsp;&nbsp;&nbsp;&nbsp;Display Check button</label><br>
+  <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+  <label for="vehicle2"> &nbsp;&nbsp;&nbsp;&nbsp;Display Show button</label><br>
+  <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat" checked>
+  <label for="vehicle3"> &nbsp;&nbsp;&nbsp;&nbsp;Display Clear button</label><br><br>
+ <h2> <input type="submit" id="lname" name="lname" value="submit" ></h2>
+</form>
+
+    </div>
+    <div class="col-sm-6" style="background:#87cc25;border-radius: 25px;">
+      <h3>Ouput File for GSite<br>
+ <a href="<? echo $file; ?>" download>Click to download HTML file for webhosting</a>
+      </h3>        
+<textarea name="result"  rows=10 cols=80 class="form-control"><? echo $output;   ?></textarea>    
+      <h3>Preview</h3>        
+<div style="border:1px solid black;padding:5px;background:whitesmoke;"><? echo $output;   ?></div>
+<br>
+  </div>
+</div>
+</div>
+<br><br>
+<div class="jumbotron text-center" style="background:#a4f72f;border-radius: 25px;">
+  <h2>Sample Item:</h2>
+  <p>Jenny is the [demure] one, always quiet and unassuming, too unassuming I would say: sometimes her outfit can border on the [austere] - plain wool skirt and white blouse - you know the sort of thing. But I'll say one thing for her, even after a few drinks she always remains perfectly [lucid] , when the rest of us are all mumbling incoherent nonsense. Tammy can be very insensitive with her [glib] remarks about Jenny's total lack of fashion sense. But they are like water off a duck's back to Jenny.
+
+  
+    <h2>Sample Item:</h2>
+  <p>1 + 1 = [2]  2 + 2 = [4]  3 + 3 = [6]  4 + 4 = [8]</p>
+  
+    <h2>Sample Item:</h2>
+  <p> <p>1 + 1 = []  2 + 2 = []  3 + 3 = []  4 + 4 = []</p></p>
+
+
+</div>
+</body>
+</html>

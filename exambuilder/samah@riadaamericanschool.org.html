@@ -1,0 +1,118 @@
+
+<?   
+//echo $_SERVER["HTTP_USER_AGENT"];
+$mobile="no";
+
+$iPod    = stripos($_SERVER["HTTP_USER_AGENT"],"iPod");
+$iPhone  = stripos($_SERVER["HTTP_USER_AGENT"],"iPhone");
+$iPad    = stripos($_SERVER["HTTP_USER_AGENT"],"iPad");
+$Android = stripos($_SERVER["HTTP_USER_AGENT"],"Android");
+$webOS   = stripos($_SERVER["HTTP_USER_AGENT"],"webOS");
+
+//do something with this information
+if( $iPod || $iPhone ){
+    $mobile="yes";
+}else if($iPad){
+    $mobile="no";
+}else if($Android){
+    $mobile="yes";
+}else if($webOS){
+    $mobile="no";
+}$mobile1 = $mobile;$mobile2 = $mobile;$mobile3 = $mobile;$mobile4 = $mobile;$mobile5 = $mobile;$mobile6 = $mobile;
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Live WS Test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<style>
+  iframe::-webkit-scrollbar {  
+    display: none;
+    scrollbar-width: none;  /* Firefox */
+  }  
+</style>
+
+<style>
+  body {background:;color:;}
+  .jumbotron{  
+       margin-top:20px;
+       margin-left:15px;
+      border-radius:15px; 
+      box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.5);
+      background:;
+   }
+  iframe {
+  margin:10px;
+      border-radius:15px; 
+    box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.5);
+    max-width:100%;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    background:lightgrey;
+  }
+  </style>
+  <style>
+/* width */
+iframe::-webkit-scrollbar, ::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+iframe::-webkit-scrollbar, ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+iframe::-webkit-scrollbar, ::-webkit-scrollbar-thumb {
+  background: red; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+iframe::-webkit-scrollbar, ::-webkit-scrollbar-thumb:hover {
+  background: #b30000; 
+}
+</style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + "px";
+  }
+</script>
+</head>
+<body xxxoncontextmenu="return false;" class=" text-center">
+
+
+  <div class="container text-center">
+  <div class="row">
+<div class="jumbotron text-center"> 
+<img src="http://riadaamericanschool.org/datawarehouse/assets/img/find_user.png" alt="" style="width:125px;height:125px;">
+<h1>computer</h1>  <p>This Quiz Contains (2) Sections</p>
+</div><div class="text-center" style="margin-left:15px;border: 1px solid; border-radius: 10px;width:auto;"> 
+   <h1>Section 1</h1>  
+      <p>Answer all the questions and fill in your name.</p> 
+   <p>Click Check-button to see your score.</p> 
+      <p>Click Submit-button to send your score to the teacher and view the "End" sign.</p> 
+            <p>Scroll down for the next section.</p> 
+   </div>
+   </div>
+   
+   <div class="row">
+    <iframe id="ifr"  oncontextmenu="return false;" scrolling="<? echo $mobile1; ?>" src=http://classroom.riadaamericanschool.org/ms-samah/grade-4/G.4_Q.3_P.1.html width="" height="" ></iframe>
+     </div>
+</div>
+<script>
+window.addEventListener("load", function () {
+//  alert("Hello!");
+
+//var list = document.getElementsByTagName("iframe");
+var list = document.getElementById("ifr");
+list.style.overflowY = "hidden";
+})
+</script>
+</body>
+</html>

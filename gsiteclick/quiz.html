@@ -1,0 +1,270 @@
+﻿<!DOCTYPE HTML>
+
+<html>
+<head>
+<title>Gapfiller</title>
+<style type="text/css">
+
+
+.instrC{
+color:gray;
+font-weight:bold;
+}
+
+.wordbox{
+border:solid gray 2px;
+margin:10px auto;
+padding:3px 5px;
+line-height:1.5;
+font-weight:bold;
+color:gray;
+padding:4px 10px;
+border-radius:15px;
+-moz-border-radius:15px;
+-webkit-border-radius:15px;
+-o-border-radius:15px;
+box-shadow:2px 2px 7px #333;
+-moz-box-shadow:2px 2px 7px #333;
+-webkit-box-shadow:2px 2px 7px #333;
+-o-box-shadow:2px 2px 7px #333;
+text-align:center;
+}
+
+.optionWord{
+color:gray;
+font-weight:bold;
+}
+
+.optionWord a{
+color:gray;
+text-decoration:none;
+}
+
+.optionWord a:hover{
+color:black;
+text-decoration:none;
+}
+
+.tdNumC{
+padding:0 7px 0 0px;
+color:gray;
+font-weight:bold;
+vertical-align:top;
+}
+
+.buttonC{
+background:gray;
+color:white;
+padding:2px 3px;
+font-weight:bold;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+-o-border-radius:5px;
+-moz-box-shadow:1px 1px 5px #333;
+-webkit-box-shadow:1px 1px 5px #333;
+-o-box-shadow:1px 1px 5px #333;
+margin:0 2px;
+}
+
+.textBoxC{
+border:none;
+border-bottom:1px dotted gray;
+}
+
+
+
+</style>
+
+<script type="text/javascript">
+
+var clickedWord="";
+var ans1=["demure","austere","lucid","glib","cavalier","caustic","lurid","volatile","stoic","maudlin"];
+
+// JS Code for checking the answers
+function checkAnsBoxAnswersV2(ansCode,exNum){ 
+  var ca=0;
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans=doAnswers(guess,ansCode[c]);
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else{
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.color="red" ;
+    } 
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+
+
+function checkAnsBoxInvisibleAnswersScoreV2(ansCode,exNum){
+  var ca=0;
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans=doAnswers(guess,ansCode[c]);
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(1);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else if(guess==""){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(3);
+    }
+    else{
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(2);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="red";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+
+
+function doAnswers(guess,ans){
+  if(guess==ans){
+    txt="yes";
+  }
+  else{
+    txt="no";
+  }
+  return txt;
+}
+
+
+function getInvisibleAnswersSign(x){
+  if(x==1){
+    var txt='<span style="color:green;font-weight:bold;">Y</span>';
+  }
+  else if(x==2){ 
+    var txt='<span style="font-size: 100%;color:red;font-weight:bold;">X</span>';
+  }
+  else if(x==3){ 
+    var txt='<span style="font-size: 100%;color:orange;font-weight:bold;">?</span>';
+  }
+  return txt  ;
+}
+
+
+function showScoreV2(ansCode,exNum,ca){
+  var qlen=ansCode.length;
+  var pc=ca/qlen*100;
+  pc=Math.round(pc);
+  var txt="<span style='color:green;font-weight:bold;'>You have scored "+pc+" percent ( "+ca+" / "+qlen+" )</span>";
+  document.getElementById("messageArea"+exNum).innerHTML=txt;
+}
+
+
+function doSpaces(exNum,qNum){
+  var txt=document.getElementById("ex"+exNum+"AnsBox"+qNum).value;
+  if(txt.charAt(txt.length-1)==" "){
+    txt=txt.slice(0,txt.length-1);
+    document.getElementById("ex"+exNum+"AnsBox"+qNum).value=txt;
+  }
+  return txt;
+}
+// JS Code for showing the answers
+function showAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  if(document.getElementById("ex"+exNum+"AnsBox"+c).value==ansCode[c]){
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+  }
+  else{
+    document.getElementById("ex"+exNum+"AnsBox"+c).value=ansCode[c];
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="red";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+}
+// JS Code for clearing the answers
+function clearAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+  }
+  clearMessageArea(exNum);
+}
+
+
+function clearAnsBoxInvisibleAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+    document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+    document.getElementById("ex"+exNum+"TickBox"+c).innerHTML="";
+  }
+  clearMessageArea(exNum);
+}
+
+function clearMessageArea(exNum){
+  document.getElementById("messageArea"+exNum).innerHTML="";
+}
+// Optional JS Code for Click and Drop
+function makeClickedWord(exNum,x){
+  var txt=document.getElementById("ex"+exNum+"Word"+x).innerHTML;
+  clickedWord=txt;
+}
+
+
+function enterClickedWord(exNum,x){
+  var txt=clickedWord;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=txt;
+  clickedWord="";
+}
+
+
+function enterClickedWordCap(exNum,x){
+  var txt=clickedWord;
+  var firstLetter=txt.slice(0,1);
+  firstLetter=firstLetter.toUpperCase();
+  var rest=txt.slice(1,txt.length);
+  txt=firstLetter+rest;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=txt;
+  clickedWord="";
+}
+</script>
+    
+</head>
+<body>
+
+<div>
+<h4 style="text-align:center;margin:20px auto;font-family:arial;font-size:12px;"><span class="instrC">Get - causative</span></h4>
+<div id="wordBox" class="wordbox" style="margin:10px 0;">
+<span class="optionWord">maudlin</span> &nbsp; · &nbsp;
+<span class="optionWord">cavalier</span> &nbsp; · &nbsp;<span class="optionWord">glib</span> &nbsp; · &nbsp;
+<span class="optionWord">caustic</span> &nbsp; · &nbsp;<span class="optionWord">lurid</span> &nbsp; · &nbsp;
+<span class="optionWord">demure</span> &nbsp; · &nbsp;<span class="optionWord">lucid</span> &nbsp; · &nbsp;
+<span class="optionWord">stoic</span> &nbsp; · &nbsp;<span class="optionWord">austere</span> &nbsp; · &nbsp;
+<span class="optionWord">volatile</span> &nbsp; </div>
+
+<div style="font-family:arial;"><table style="line-height:1.5;font-size:12px;"><tbody>
+
+<tr><td class="tdNumC">1.</td><td>Jenny is the <input style="width: 80px;" class="textBoxC" type="text" id="ex1AnsBox0">  one, always quiet and unassuming, too unassuming I would say: sometimes her outfit can border on the  <input style="width: 80px;" class="textBoxC" type="text" id="ex1AnsBox1">  - plain wool skirt and white blouse - you know the sort of thing. But I'll say one thing for her, even after a few drinks she always remains perfectly  <input style="width: 80px;" class="textBoxC" type="text" id="ex1AnsBox2">  , when the rest of us are all mumbling incoherent nonsense. Tammy can be very insensitive with her  <input style="width: 80px;" class="textBoxC" type="text" id="ex1AnsBox3">  remarks about Jenny's total lack of fashion sense. But they are like water off a duck's back to Jenny. </td></tr>
+
+<tr style="height:10px;"><td></td></tr>
+
+<tr><td class="tdNumC">2.</td><td>Sammy is the opposite, with a <input style="width:80px;" class="textBoxC" type="text" id="ex1AnsBox4">  disregard for the serious side of life, but at least you know where you stand with her. As long as, that is, you can put up with her  <input style="width:80px;" class="textBoxC" type="text" id="ex1AnsBox5">  comments about the qualities (or lack of them) of her various lovers, not to mention the  <input style="width:80px;" class="textBoxC" type="text" id="ex1AnsBox6">  details of their bedroom antics that she so delights in telling the rest of us. </td></tr>
+
+<tr style="height:10px;"><td></td></tr>
+
+<tr><td class="tdNumC">3.</td><td>Tammy is the <input style="width:80px;" class="textBoxC" type="text" id="ex1AnsBox7">  one, swinging wildly from one mood to another. She's normally pretty  <input style="width:80px;" class="textBoxC" type="text" id="ex1AnsBox8">  about life, showing almost no emotion. But after a few drinks she often switches mood to being  <input style="width:80px;" class="textBoxC" type="text" id="ex1AnsBox9"> , crying her heart out over absolutely nothing. That's when Sammy comes into her own, she's the only one who can snap Tammy out of it.  </td></tr></tbody></table></div>
+
+<div style="margin:10px 0;">
+<input type="button" class="buttonC" value="Check" onclick="checkAnsBoxAnswersV2(ans1,1)"/>
+<input type="button" class="buttonC" value="Show" onclick="showAnsBoxAnswersV2(ans1,1)"/>
+<input type="button" class="buttonC" value="Clear" onclick="clearAnsBoxAnswersV2(ans1,1)"/>
+ <span id="messageArea1">
+</span>
+</div>
+
+
+
+
+</div>
+
+</body>
+</html>

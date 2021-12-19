@@ -1,0 +1,413 @@
+<?
+      $anslist ='var ans1=[';
+      for ($x = 0; $x < (sizeof($_POST)-4)/3 ; $x++){
+      $props= explode("-",$_POST[$x+4]);
+//if (strcmp($props[0],'xco') !=0 || strcmp($props[0],'yco') !=0){
+      $anslist .='"'.$_POST[$x+4].'",';
+//      }
+      }
+      $anslist  = substr($anslist,0,-1);
+      $anslist .='];';
+
+//print_r($_POST);
+//print_r($anslist);
+
+$html = '<!DOCTYPE html>
+<html>
+<head>
+<title>Live Worksheets</title>';
+
+//////////////////////////////////////////////////////////////////////
+$html .='
+<link href="https://fonts.googleapis.com/css2?family=WindSong&display=swap" rel="stylesheet">
+<style type="text/css">
+.instrC{
+color:gray;
+font-weight:bold;
+}
+.wordbox{
+border:solid gray 2px;
+margin:10px auto;
+padding:3px 5px;
+line-height:1.5;
+font-weight:bold;
+color:gray;
+padding:4px 10px;
+border-radius:15px;
+-moz-border-radius:15px;
+-webkit-border-radius:15px;
+-o-border-radius:15px;
+box-shadow:2px 2px 7px #333;
+-moz-box-shadow:2px 2px 7px #333;
+-webkit-box-shadow:2px 2px 7px #333;
+-o-box-shadow:2px 2px 7px #333;
+text-align:center;
+}
+.optionWord{
+color:gray;
+font-weight:bold;
+}
+.optionWord a{
+color:gray;
+text-decoration:none;
+}
+.optionWord a:hover{
+color:black;
+text-decoration:none;
+}
+.tdNumC{
+padding:0 7px 0 0px;
+color:gray;
+font-weight:bold;
+vertical-align:top;
+}
+.buttonC{
+background:gray;
+color:white;
+padding:2px 3px;
+font-weight:bold;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+-o-border-radius:5px;
+-moz-box-shadow:1px 1px 5px #333;
+-webkit-box-shadow:1px 1px 5px #333;
+-o-box-shadow:1px 1px 5px #333;
+margin:0 2px;
+}
+.textBoxC{
+border:none;
+border-bottom:1px dotted gray;
+}
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);  
+  z-index: 999999;  
+  cursor: pointer;  
+}
+</style>
+<script type="text/javascript">
+var clickedWord="";';
+
+
+    $html .= $anslist;
+
+      $html .= '
+function checkAnsBoxAnswersV2(ansCode,exNum){ ';
+
+if(!isset($_POST["vehicle111"])){$html .= ' document.getElementById("checker").style.display="none"; ';}
+
+      $html .= '
+  var ca=0;
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans=doAnswers(guess,ansCode[c]);
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else{
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.background="orange" ;
+    } 
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+function checkAnsBoxInvisibleAnswersScoreV2(ansCode,exNum){
+  var ca=0;
+  for(var c=0;c<ansCode.length;c++){
+    var guess=doSpaces(exNum,c);
+    var ans=doAnswers(guess,ansCode[c]);
+    if(ans=="yes"){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(1);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+      ca++;
+    }
+    else if(guess==""){
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(3);
+    }
+    else{
+      document.getElementById("ex"+exNum+"TickBox"+c).innerHTML=getInvisibleAnswersSign(2);
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="red";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+  showScoreV2(ansCode,exNum,ca) ;
+}
+function doAnswers(guess,ans){
+  if(guess==ans){
+    txt="yes";
+  }
+  else{
+    txt="no";
+  }
+  return txt;
+}
+function getInvisibleAnswersSign(x){
+  if(x==1){
+    var txt="<span style=color:green;font-weight:bold;>Y</span>";
+  }
+  else if(x==2){ 
+    var txt="<span style=font-size:100%;color:red;font-weight:bold;>X</span>";
+  }
+  else if(x==3){ 
+    var txt="<span style=font-size:100%;color:orange;font-weight:bold;>?</span>";
+  }
+  return txt  ;
+}
+function showScoreV2(ansCode,exNum,ca){
+  var qlen=ansCode.length;
+  var pc=ca/qlen*100;
+  pc=Math.round(pc);
+  var txt="<span style=z-index:100000;color:red;font-weight:bold;>You have scored "+pc+" percent</span> <br> <span style=z-index:100000;color:red;font-weight:bold;font-size:250px> "+ca+"/"+qlen+" </span><input type=hidden id=score name=score value="+ca+"/"+qlen+"><input type=submit id=submit name=submit  value=Submit>  ";
+  document.getElementById("messageArea"+exNum).innerHTML=txt;
+}
+function doSpaces(exNum,qNum){
+  var txt=document.getElementById("ex"+exNum+"AnsBox"+qNum).value;
+  if(txt.charAt(txt.length-1)==" "){
+    txt=txt.slice(0,txt.length-1);
+    document.getElementById("ex"+exNum+"AnsBox"+qNum).value=txt;
+  }
+  return txt;
+}
+// JS Code for showing the answers
+function showAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  if(document.getElementById("ex"+exNum+"AnsBox"+c).value==ansCode[c]){
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="green";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+  }
+  else{
+    document.getElementById("ex"+exNum+"AnsBox"+c).value=ansCode[c];
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.background="orange";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="bold";
+    }
+  }
+}
+// JS Code for clearing the answers
+function clearAnsBoxAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+  document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+      document.getElementById("ex"+exNum+"AnsBox"+c).style.background="lightgrey";
+  document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+  }
+  clearMessageArea(exNum);
+}
+function clearAnsBoxInvisibleAnswersV2(ansCode,exNum){
+  for(var c=0;c<ansCode.length;c++){
+    document.getElementById("ex"+exNum+"AnsBox"+c).value="";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.color="black";
+    document.getElementById("ex"+exNum+"AnsBox"+c).style.fontWeight="normal";
+    document.getElementById("ex"+exNum+"TickBox"+c).innerHTML="";
+  }
+  clearMessageArea(exNum);
+}
+function clearMessageArea(exNum){
+  document.getElementById("messageArea"+exNum).innerHTML="";
+}
+// Optional JS Code for Click and Drop
+function makeClickedWord(exNum,x){
+  var txt=document.getElementById("ex"+exNum+"Word"+x).innerHTML;
+  clickedWord=txt;
+}
+function enterClickedWord(exNum,x){
+  var txt=clickedWord;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=txt;
+  clickedWord="";
+}
+function enterClickedWordCap(exNum,x){
+  var txt=clickedWord;
+  var firstLetter=txt.slice(0,1);
+  firstLetter=firstLetter.toUpperCase();
+  var rest=txt.slice(1,txt.length);
+  txt=firstLetter+rest;
+  document.getElementById("ex"+exNum+"AnsBox"+x).value=txt;
+  clickedWord="";
+}
+</script>    
+';
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+$html .='<script>
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+// Simulate an HTTP redirect:
+var refreshname = getCookie("refresh");
+if( refreshname.localeCompare("'.$_POST['frmname'].'") == 0){
+window.location.replace("http://www.riadaamericanschool.org");
+}
+</script>';
+/////////////////////////////////////////////////////////////
+if(!isset($_POST["vehicle111"])){
+$html .='<script>
+document.cookie = "refresh='.$_POST['frmname'].'"; 
+</script>';
+}
+///////////////////////////////////////////////////
+
+$html .='
+<style>
+#viewer {
+background-image: url("';
+$html .= $_POST['hidurl'];
+
+$html .= '");
+background-position: left top;background-repeat: no-repeat;
+}';
+
+
+ 
+for ($x = 0; $x < (sizeof($_POST)-4)/3 ; $x++){
+$props= explode("-",$_POST[$x+4]);
+ 
+$html .= '#ex1AnsBox'.($x).' { position: absolute; left:'.$_POST["xco-".($x+4)].'px; top:'.$_POST["yco-".($x+4)].'px; }';
+}
+
+
+$html .='</style>
+</head>
+<body id="viewer" style="height:2000px;width:1250px;">
+ <div id="overlay"></div> ';
+$html .= '<form onsubmit="mySubmit(event)" action="http://riadaamericanschool.org/formmaker/livews/sendemail.php" method="post">
+<label for="css">Sheet Name: '.$_POST['frmname'].'</label><br>
+  <input type="hidden" id="css1" name="sheetname" value="'.$_POST['frmname'].'">
+  <label for="css2">Teacher Email: '.$_POST['usremail'].'</label><br>
+  <input type="hidden" id="css2" name="emailteacher" value="'.$_POST['usremail'].'">
+    <label for="css3">Student Name:</label>
+  <input type="text" id="css3" name="namestudent" placeholder="Enter Student Name" value="">
+      <label for="css4">Student Email:</label>
+  <input type="text" id="css4" name="emailstudent" placeholder="Enter Student Email" value="">
+
+';
+
+
+ 
+for ($x = 0; $x < (sizeof($_POST)-4)/3 ; $x++){
+$props= explode("-",$_POST[$x+4]);
+
+
+//$answer[$x] = $props[2];
+
+$html .= '<input style="background:lightgrey;line-height:20px;font-size:20px;" id="ex1AnsBox'.($x).'" name="'.$x.'" size="5"  class="textBoxC" value="" />';
+
+$html .= '<input type="hidden"  id="xco-'.($x).'" name="xco-'.$x.'"    value="'.$_POST["xco-".$x].'" />';
+$html .= '<input type="hidden"  id="yco-'.($x).'" name="yco-'.$x.'"    value="'.$_POST["yco-".$x].'" />';
+
+
+}//for x
+///////////////////////////////////////////////////
+$html .= '<div style="margin:10px 0;"><br><br>';
+
+if(!isset($_POST["vehicle1"])){$html .= '<input type="button" id="checker" class="buttonC" value="Check" onclick="checkAnsBoxAnswersV2(ans1,1)"/>';}
+
+if(isset($_POST["vehicle111"])){$html .= '<input type="button" class="buttonC" value="Clear" onclick="clearAnsBoxAnswersV2(ans1,1)"/>';}
+
+//$html .= ' <br><br><span id="messageArea1" style="font-family:WindSong, cursive;font-size:300%;font-weight:bold;color:red;"></span></div>';
+$html .= ' <br><br><div id="messageArea1" style="position: relative;z-index:1000000;font-family:WindSong, cursive;font-size:300%;font-weight:bold;color:red;"></div></div>';
+
+///////////////////////////////////////////////////
+$html .= '</form>';
+$html .= '';
+
+$html .= '<script>
+var sheetname = "'.$_POST['frmname'].'";
+function mySubmit(e){
+var grab = document.getElementById("css3");
+var shtname = getCookie("sheetname");
+console.log(shtname);
+console.log(document.cookie);
+ if (shtname != "'.$_POST['frmname'].'"){
+if (grab.value.localeCompare("") ==0){
+e.preventDefault();alert("Enter your name!"); return false;
+}
+document.cookie = "sheetname='.$_POST['frmname'].'"; 
+document.getElementById("overlay").style.display = "block";
+}
+else{e.preventDefault();alert("Already submitted!");return false;}
+}</script>';
+
+
+$html .= '<script>';
+for ($x = 0; $x < (sizeof($_POST)-4)/3 ; $x++){
+$props= explode("-",$_POST[$x+4]);
+$html .= '
+var v'.$x.' = document.getElementById("ex1AnsBox'.($x).'");
+v'.$x.'.style.position = "absolute";
+v'.$x.'.style.left = '.$_POST["xco-".($x+4)].'px; 
+v'.$x.'.style.top = '.$_POST["yco-".($x+4)].'px; 
+';
+}
+$html .= '</script>';
+
+$html .= '
+</script>
+ <script type = "text/javascript" >  
+    function preventBack() { window.history.forward(); }  
+    setTimeout("preventBack()", 0);  
+    window.onunload = function () { null };  
+</script> 
+</body>
+</html>
+';
+
+$file = $_POST['usremail'].'.html';
+file_put_contents($file, $html);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Live Worksheets</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+  
+<div class="container" style=" height: 2000px;width: 1250 px;">
+
+ <?php echo $html; ?> 
+
+
+  <div class="row">
+    <div class="col-sm-9">
+<!--<iframe src="./file.html" width=100% height=1500px ></iframe>-->
+    </div>
+    <div class="col-sm-3" style="display:sticky;">
+
+<a href="<? echo $file; ?>" download>Click to download HTML file for webhosting</a>
+      <h3>Copy Embed Code Here</h3>
+<textarea rows=20 cols=40><?php echo $html; ?></textarea>
+<div></div>
+</div>
+
+  </div>
+</div>
+
+</body>
+</html>
